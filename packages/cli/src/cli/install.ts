@@ -1,4 +1,4 @@
-import chalk from 'chalk'
+import type { AgentType, InstallOptions, SkillInfo } from '@tech-leads-club/core'
 import {
   AGENT_TYPES,
   ensureSkillDownloaded,
@@ -6,8 +6,9 @@ import {
   forceDownloadSkill,
   getRemoteSkills,
   installSkills,
+  resolveSkillDependencies,
 } from '@tech-leads-club/core'
-import type { AgentType, InstallOptions, SkillInfo } from '@tech-leads-club/core'
+import chalk from 'chalk'
 
 import { ports } from '../ports'
 
@@ -23,20 +24,31 @@ async function downloadSkills(skillNames: string[], forceDownload: boolean): Pro
   // Bypass the 24h registry TTL so re-install can see newly published content hashes.
   await fetchRegistry(ports, true)
   const allSkills = await getRemoteSkills(ports)
+
+  const resolution = resolveSkillDependencies(allSkills, skillNames)
+  for (const missingName of resolution.missing) {
+    console.error(chalk.red(`❌ Skill "${missingName}" not found`))
+  }
+  for (const cycle of resolution.cycles) {
+    console.warn(chalk.yellow(`⚠️  Circular skill dependency ignored: ${cycle.join(' → ')}`))
+  }
+  if (resolution.autoIncluded.length > 0) {
+    console.log(
+      chalk.dim(`  + ${resolution.autoIncluded.length} dependency skill(s) added automatically: `) +
+        chalk.dim(resolution.autoIncluded.join(', ')),
+    )
+  }
+
   const selectedSkills: SkillInfo[] = []
 
-  for (const skillName of skillNames) {
-    const skill = allSkills.find((s) => s.name === skillName)
-    if (!skill) {
-      console.error(chalk.red(`❌ Skill "${skillName}" not found`))
-      continue
-    }
-
-    const path = forceDownload ? await forceDownloadSkill(ports, skillName) : await ensureSkillDownloaded(ports, skillName)
+  for (const skill of resolution.resolved) {
+    const path = forceDownload
+      ? await forceDownloadSkill(ports, skill.name)
+      : await ensureSkillDownloaded(ports, skill.name)
     if (path) {
       selectedSkills.push({ ...skill, path })
     } else {
-      console.error(chalk.red(`❌ Failed to download skill "${skillName}"`))
+      console.error(chalk.red(`❌ Failed to download skill "${skill.name}"`))
     }
   }
 

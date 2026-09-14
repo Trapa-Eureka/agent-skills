@@ -163,6 +163,17 @@ export interface SkillPermissions {
 export interface SkillRequirements {
   /** MCP server names the skill depends on. */
   mcp?: string[]
+  /**
+   * Names of other catalog skills this skill depends on. The installer resolves these
+   * transitively and installs them alongside the requesting skill — see
+   * {@link resolveSkillDependencies}.
+   */
+  skills?: string[]
+  /**
+   * Free-text external tool/CLI names the skill expects on `PATH` (e.g. `gh`, `docker`).
+   * Advisory only — unlike `skills`, these are never resolved or installed automatically.
+   */
+  tools?: string[]
 }
 
 /**

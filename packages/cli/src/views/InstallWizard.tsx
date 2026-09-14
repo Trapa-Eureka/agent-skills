@@ -1,3 +1,4 @@
+import { resolveSkillDependencies } from '@tech-leads-club/core'
 import { Box, Text, useInput } from 'ink'
 import Spinner from 'ink-spinner'
 import { useAtom, useAtomValue, useSetAtom } from 'jotai'
@@ -39,6 +40,10 @@ export function InstallWizard({ onExit }: { onExit: () => void }) {
   const { install, progress, results, installing } = useInstaller()
   const [installStarted, setInstallStarted] = useState(false)
   const [installComplete, setInstallComplete] = useState(false)
+  const [dependencyNotice, setDependencyNotice] = useState<{ autoIncluded: string[]; cycles: string[][] }>({
+    autoIncluded: [],
+    cycles: [],
+  })
 
   const handleAgentSelect = (agents: AgentType[]) => {
     if (agents.length === 0) return
@@ -62,9 +67,14 @@ export function InstallWizard({ onExit }: { onExit: () => void }) {
     next()
   }
 
-  const handleSkillSelect = (skills: SkillInfo[]) => {
-    if (skills.length === 0) return
-    setSelectedSkills(skills)
+  const handleSkillSelect = (selected: SkillInfo[]) => {
+    if (selected.length === 0) return
+    const resolution = resolveSkillDependencies(
+      skills,
+      selected.map((s) => s.name),
+    )
+    setSelectedSkills(resolution.resolved)
+    setDependencyNotice({ autoIncluded: resolution.autoIncluded, cycles: resolution.cycles })
     next()
   }
 
@@ -153,6 +163,7 @@ export function InstallWizard({ onExit }: { onExit: () => void }) {
           initialMethod="copy"
           initialGlobal={false}
           skills={selectedSkills}
+          dependencyNotice={dependencyNotice}
         />
       )}
     </Box>

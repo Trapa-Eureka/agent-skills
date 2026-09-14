@@ -202,11 +202,24 @@ permissions:
 requires:
   mcp:
     - context7
+  skills:
+    - some-other-skill
+  tools:
+    - gh
 ```
 
 `tools/validate-skills.ts` warns (never fails CI) when `permissions` is missing, and flags a
 warning when `permissions.shell.enabled: false`/`permissions.network.enabled: false` looks
 inconsistent with a shell code block or `curl`/`fetch` call in the body.
+
+`requires.skills` names other catalog skills this one depends on. The CLI resolves this
+transitively before installing (`resolveSkillDependencies` in `@tech-leads-club/core`) — selecting
+one skill also installs everything it (transitively) requires, deduplicated. Unlike `permissions`,
+this one **does** fail CI: `tools/validate-skills.ts` checks the whole catalog graph and fails the
+build if `requires.skills` references a skill that doesn't exist, or if any dependency chain forms
+a cycle — a legitimate skill graph should never have either. `requires.tools` is the advisory,
+non-resolved counterpart for external CLIs the skill expects on `PATH` (e.g. `gh`, `docker`) —
+declaring one there is documentation only, the installer does nothing with it.
 
 ### Behavioral Evals (optional)
 
