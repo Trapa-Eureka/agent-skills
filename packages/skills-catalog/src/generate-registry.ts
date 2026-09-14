@@ -10,6 +10,7 @@ import YAML from 'yaml'
 import {
   CATEGORY_FOLDER_PATTERN,
   CATEGORY_METADATA_FILE,
+  computeSkillBundleHash,
   computeSkillHash,
   getFilesInDirectory,
   parseSkillFrontmatter,
@@ -108,6 +109,7 @@ function scanSkillsInCategory(
     const { permissions, requires } = parseSkillPermissions(content)
     const files = getFilesInDirectory(skillPath)
     const contentHash = computeSkillHash(skillPath, files)
+    const bundleHash = computeSkillBundleHash(skillPath, files)
     const relativePath = categoryId === 'uncategorized' ? entry.name : `(${categoryId})/${entry.name}`
     const rawName = name || entry.name
     const skillName = SKILL_NAME_SLUG_PATTERN.test(rawName) ? rawName : toSlug(rawName)
@@ -124,6 +126,7 @@ function scanSkillsInCategory(
       author,
       version,
       contentHash,
+      bundleHash,
       ...(permissions ? { permissions } : {}),
       ...(requires ? { requires } : {}),
       ...(compatibility ? { compatibility } : {}),

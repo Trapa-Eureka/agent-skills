@@ -195,6 +195,9 @@ agent-skills snapshot export -o ./offline-mirror -s aws-advisor coding-guideline
 # Install from a snapshot instead of the CDN — no network access needed
 agent-skills install --registry ./offline-mirror -s aws-advisor
 
+# Build a skill into a reproducible tar bundle (same source → same bundle hash, always)
+agent-skills package aws-advisor -o aws-advisor.tar
+
 # View audit log
 agent-skills audit                   # Show recent operations
 agent-skills audit -n 20             # Show last 20 entries

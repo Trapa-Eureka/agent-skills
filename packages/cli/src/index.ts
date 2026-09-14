@@ -128,6 +128,17 @@ snapshotCommand
     await runCliSnapshotExport(options)
   })
 
+// Package command (single-file, reproducible skill bundle)
+program
+  .command('package')
+  .description('Build a single skill into a reproducible tar bundle')
+  .argument('<skill>', 'Skill name to package')
+  .option('-o, --output <file>', 'Output file path (default: <skill>.tar)')
+  .action(async (skill, options) => {
+    const { runCliPackage } = await import('./cli/package')
+    await runCliPackage(skill, options)
+  })
+
 program.parse(process.argv)
 
 function shouldUseInteractiveMode(options: Record<string, unknown>): boolean {

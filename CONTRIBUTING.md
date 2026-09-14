@@ -253,6 +253,20 @@ changes — and add a migration step to `registry-schema.service.ts`'s step map 
 the new registry while still expecting the old shape can transform it, mirroring
 `migrateLockFile` in `lockfile.service.ts` for the local lockfile's own `version`.
 
+### Reproducible Bundles
+
+Every skill's registry entry also carries a `bundleHash`, alongside `contentHash`. Both are fully
+mechanical — the generator computes them from a skill's files, nothing to author — but they prove
+different things: `contentHash` only shows file content didn't change; `bundleHash` is the SHA-256
+of a deterministic tar archive of those same files
+(`createDeterministicTarball`/`hashBundle` in `libs/core/src/lib/services/bundle.service.ts`), so
+anyone can rebuild the exact distributable artifact from source and independently verify it
+matches what was published — `agent-skills package <skill>` does exactly that, and reports whether
+its rebuild matches the registry's `bundleHash`. "Deterministic" here specifically means every
+field a normal tar writer would fill from the filesystem or clock (mtime, uid/gid, permissions) is
+a fixed constant instead, and entries are always written in path-sorted order — so the archive
+depends only on the file contents, never on when or where it was built.
+
 ### Category Metadata
 
 `_category.json`:

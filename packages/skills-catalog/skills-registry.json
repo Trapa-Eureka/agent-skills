@@ -75,7 +75,8 @@
       ],
       "author": "web-quality-skills",
       "version": "1.0",
-      "contentHash": "706129400c8c91a9264582940b36007116faffcaf27bb0780bdab87337b4f881"
+      "contentHash": "706129400c8c91a9264582940b36007116faffcaf27bb0780bdab87337b4f881",
+      "bundleHash": "f762d53f69eea3d02e2009978dd2d31a6908120ad9175a1b3da0270bbbc25f92"
     },
     {
       "name": "ai-cold-outreach",
@@ -89,7 +90,8 @@
       ],
       "author": "Chad Boyda / agent-gtm-skills",
       "version": "1.0.0",
-      "contentHash": "7a2ca1d3f443357b96f22ffce9fb6d5e19134bb5d723ea55ca939873b3777c12"
+      "contentHash": "7a2ca1d3f443357b96f22ffce9fb6d5e19134bb5d723ea55ca939873b3777c12",
+      "bundleHash": "fc2f798abc5246556baa397db7e1514700b3defb1ba40fe4f3aaf7388c5fbd2b"
     },
     {
       "name": "ai-pricing",
@@ -103,7 +105,8 @@
       ],
       "author": "Chad Boyda / agent-gtm-skills",
       "version": "1.0.0",
-      "contentHash": "642a42cf94b8061aad642d84363bb4f60712af858c093bed6f2ec6135a3e7937"
+      "contentHash": "642a42cf94b8061aad642d84363bb4f60712af858c093bed6f2ec6135a3e7937",
+      "bundleHash": "9e85aeb79fc51eb178b35dcacc87688e8528e81f1c8e3ac7e2ca71a215fba3a3"
     },
     {
       "name": "ai-sdr",
@@ -117,7 +120,8 @@
       ],
       "author": "Chad Boyda / agent-gtm-skills",
       "version": "1.0.0",
-      "contentHash": "3f36a4b65cb1fc97722341b9fb1849fcecf320be8a1d8892028fa45663719786"
+      "contentHash": "3f36a4b65cb1fc97722341b9fb1849fcecf320be8a1d8892028fa45663719786",
+      "bundleHash": "1053d9358afdcad8b38abacba4c45c24011aaa11d4ca9887e4de9b72f31380a6"
     },
     {
       "name": "ai-seo",
@@ -129,7 +133,8 @@
       ],
       "author": "Chad Boyda / agent-gtm-skills",
       "version": "1.0.0",
-      "contentHash": "8ff9c7d6181c37c92fb225a8559d50ee5413c20e6a7ae240e05bb6a532d64f9b"
+      "contentHash": "8ff9c7d6181c37c92fb225a8559d50ee5413c20e6a7ae240e05bb6a532d64f9b",
+      "bundleHash": "e25f3db7c09890fc4c29fce1f3cfd4b08910eb249c3de87cbfc2d29c140fa095"
     },
     {
       "name": "ai-ugc-ads",
@@ -141,7 +146,8 @@
       ],
       "author": "Chad Boyda / agent-gtm-skills",
       "version": "1.0.0",
-      "contentHash": "92f981122d6add656bd10cae4404fa94a79db93f3cad2cd978ef12a4eea51b83"
+      "contentHash": "92f981122d6add656bd10cae4404fa94a79db93f3cad2cd978ef12a4eea51b83",
+      "bundleHash": "d32fcc6a788ed745d99b388fd0695329c06a0e6f072d7306fee7da1aae6bd189"
     },
     {
       "name": "aws-advisor",
@@ -162,6 +168,7 @@
       "author": "Felipe Rodrigues - github.com/felipfr",
       "version": "1.0.0",
       "contentHash": "1ca257a6bdec8f078e4e5eceef16ce8d461213fbc7a1e409b84a07c8a0d0a412",
+      "bundleHash": "691abb9df478ee2b0ae1d2ad607b600dde1a0846c3c11bf50f0c72479512759e",
       "permissions": {
         "filesystem": {
           "read": true,
@@ -194,7 +201,8 @@
       ],
       "author": "web-quality-skills",
       "version": "1.0",
-      "contentHash": "e22b6d3e9c7d29cc5f92a89a1a393aa2686aa5c0cd70b7159a7fc9a2bc779461"
+      "contentHash": "e22b6d3e9c7d29cc5f92a89a1a393aa2686aa5c0cd70b7159a7fc9a2bc779461",
+      "bundleHash": "da6a49a3fe259da77067831af9ced395050c713f9096cc80be400e313c475ded"
     },
     {
       "name": "chrome-devtools",
@@ -204,7 +212,8 @@
       "files": [
         "SKILL.md"
       ],
-      "contentHash": "249d0fb724d83a9dc1b81f5812b894d471b36e6e629407cd43f9b8135fe4630a"
+      "contentHash": "249d0fb724d83a9dc1b81f5812b894d471b36e6e629407cd43f9b8135fe4630a",
+      "bundleHash": "e3ae20bae7073d1569e3f6d1c473341e884fe5b55354cc133581b1df2d1a4289"
     },
     {
       "name": "cloudflare-deploy",
@@ -524,7 +533,8 @@
       ],
       "author": "github.com/openai/skills",
       "version": "1.0.0",
-      "contentHash": "f51f33e059b64bfb145de75c5b85da8d4fdd91dd2f846557183a98f51b0f87ea"
+      "contentHash": "f51f33e059b64bfb145de75c5b85da8d4fdd91dd2f846557183a98f51b0f87ea",
+      "bundleHash": "e12013e4aafb19a16115341896879cfdf2bdd45c1a505dcb34756941783f5563"
     },
     {
       "name": "codenavi",
@@ -538,7 +548,8 @@
       ],
       "author": "Felipe Rodrigues - github.com/felipfr",
       "version": "1.0.0",
-      "contentHash": "23ac05b7f2d8df8311129d41432eba248bdcf14e9ace3f17c581976f7d888ada"
+      "contentHash": "23ac05b7f2d8df8311129d41432eba248bdcf14e9ace3f17c581976f7d888ada",
+      "bundleHash": "22f112ba505a767de3b6facefcc5a9b5aee9e58df84db6d1eb92a7b0b2287a53"
     },
     {
       "name": "coding-guidelines",
@@ -550,7 +561,8 @@
       ],
       "author": "ale",
       "version": "1.0.0",
-      "contentHash": "28a414c715d3c41aae28a25e2f109813ec3f246f76b5567c1e7d6a128cd289ff"
+      "contentHash": "28a414c715d3c41aae28a25e2f109813ec3f246f76b5567c1e7d6a128cd289ff",
+      "bundleHash": "fd9f9f5096536c5574527495fc3cff067c9fcf53041efe5a933682727dd0cd38"
     },
     {
       "name": "component-common-domain-detection",
@@ -562,7 +574,8 @@
         "README.md",
         "SKILL.md"
       ],
-      "contentHash": "58c72d63eaf387cf11ae36b223ff80478ba861f53265e42a3c4fbcb3bc739208"
+      "contentHash": "58c72d63eaf387cf11ae36b223ff80478ba861f53265e42a3c4fbcb3bc739208",
+      "bundleHash": "04f141564771d48b294ee651b0ea79fe16ede4eba3f2a1b34b7a887a98cd1383"
     },
     {
       "name": "component-flattening-analysis",
@@ -574,7 +587,8 @@
         "README.md",
         "SKILL.md"
       ],
-      "contentHash": "085696b944897a2d8c96efb6e0a3faab00f910a62a49a45c3293c32458962411"
+      "contentHash": "085696b944897a2d8c96efb6e0a3faab00f910a62a49a45c3293c32458962411",
+      "bundleHash": "a7ec6e749abf8cbdec12050fd551d9c0b94161250bed12b40c6431ea267138a5"
     },
     {
       "name": "component-identification-sizing",
@@ -586,7 +600,8 @@
         "README.md",
         "SKILL.md"
       ],
-      "contentHash": "8ec5eb90e86cc84a346f15f50c86960d8f4ba6876f6fe27d687a1ba43a2448a0"
+      "contentHash": "8ec5eb90e86cc84a346f15f50c86960d8f4ba6876f6fe27d687a1ba43a2448a0",
+      "bundleHash": "3668dc18e7e2f886513aef8c41e3d0b0593decd7daa25137eba06b56dac82009"
     },
     {
       "name": "confluence-assistant",
@@ -598,7 +613,8 @@
       ],
       "author": "Waldemar Neto - github.com/waldemarnt",
       "version": "1.0.0",
-      "contentHash": "b9f019173a7d864db1d0a9eca13ee920d294806ea4c5cabfb626ccaedbaaeae7"
+      "contentHash": "b9f019173a7d864db1d0a9eca13ee920d294806ea4c5cabfb626ccaedbaaeae7",
+      "bundleHash": "2c5ee261b9047c57deeb6eaa747c491c1f154d93068b5e191007038a70df574d"
     },
     {
       "name": "content-to-pipeline",
@@ -612,7 +628,8 @@
       ],
       "author": "Chad Boyda / agent-gtm-skills",
       "version": "1.0.0",
-      "contentHash": "925f769a4c601ea7fac8cab4d3ee00f799921eb0600427d18f458eb35db2e2ed"
+      "contentHash": "925f769a4c601ea7fac8cab4d3ee00f799921eb0600427d18f458eb35db2e2ed",
+      "bundleHash": "6ae507508397403f3109a6fec35f8f421e0435e199f43c40015d9aa1d977548b"
     },
     {
       "name": "core-web-vitals",
@@ -625,7 +642,8 @@
       ],
       "author": "web-quality-skills",
       "version": "1.0",
-      "contentHash": "3a67190e1dea1f2573d4fbb17071bbdac5ff4fd087d8cb5271094851c2acd559"
+      "contentHash": "3a67190e1dea1f2573d4fbb17071bbdac5ff4fd087d8cb5271094851c2acd559",
+      "bundleHash": "7f5e122733bad40eb1cf703c5512275da1cea20d0c5ca0bb4786a58952c8b3ba"
     },
     {
       "name": "coupling-analysis",
@@ -635,7 +653,8 @@
       "files": [
         "SKILL.md"
       ],
-      "contentHash": "a33a142a73ac2e6b8db300acb3d13dba5077e225cbfad7599b0ac431290ab5c7"
+      "contentHash": "a33a142a73ac2e6b8db300acb3d13dba5077e225cbfad7599b0ac431290ab5c7",
+      "bundleHash": "e988802221aba982e7a2423028dd319887d76def6f4958803b716a2e47514007"
     },
     {
       "name": "create-adr",
@@ -648,7 +667,8 @@
       ],
       "author": "Tech Leads Club - github.com/tech-leads-club",
       "version": "1.0.0",
-      "contentHash": "47ec663c849e8c1620c6f33a7be0055acdcf838c27ab7c16f44260244b80195a"
+      "contentHash": "47ec663c849e8c1620c6f33a7be0055acdcf838c27ab7c16f44260244b80195a",
+      "bundleHash": "cb09268001b8f08dbb0f5b3043504bf81942b11edf179bcb1e984fb7d5d3879e"
     },
     {
       "name": "create-rfc",
@@ -662,7 +682,8 @@
       ],
       "author": "Tech Leads Club - github.com/tech-leads-club",
       "version": "1.0.0",
-      "contentHash": "3f391b6c4397bb1590bbad511eca95c297dd0467e65385fa28b3724851c42ea8"
+      "contentHash": "3f391b6c4397bb1590bbad511eca95c297dd0467e65385fa28b3724851c42ea8",
+      "bundleHash": "5a8f5dcc946bc6d70ebd76961a97b5fc95ef4b3b945a995d1e2abd1878df125d"
     },
     {
       "name": "cursor-subagent-creator",
@@ -672,7 +693,8 @@
       "files": [
         "SKILL.md"
       ],
-      "contentHash": "658a170d783a694e638814bed35a738184795da2d0f0b36489cac94a478cd8d7"
+      "contentHash": "658a170d783a694e638814bed35a738184795da2d0f0b36489cac94a478cd8d7",
+      "bundleHash": "abf91d849227e2b260144837cf8ac1e0da1f3e16d0d51ed99bd0d6015f17f147"
     },
     {
       "name": "decomposition-planning-roadmap",
@@ -684,7 +706,8 @@
         "README.md",
         "SKILL.md"
       ],
-      "contentHash": "8de88d993b2556a6b38c26fd79c863f06bf7746faf87c0c9fd1b9a198a49e1ac"
+      "contentHash": "8de88d993b2556a6b38c26fd79c863f06bf7746faf87c0c9fd1b9a198a49e1ac",
+      "bundleHash": "8c5b96d8edc3cc9b3548f4e576d5f0dfb5000181c58052deef30e9d45acdd80c"
     },
     {
       "name": "docs-writer",
@@ -695,7 +718,8 @@
         "SKILL.md",
         "references/style-guide.md"
       ],
-      "contentHash": "c49827c59d2e27d313731dfd36314cfde0e8dbf15be0e8f813d2f8b751546b0c"
+      "contentHash": "c49827c59d2e27d313731dfd36314cfde0e8dbf15be0e8f813d2f8b751546b0c",
+      "bundleHash": "fa063b41db4f4a395ed886edda874ca8fa53e5e4b74fd0cbaee72c434611c1d7"
     },
     {
       "name": "domain-analysis",
@@ -708,7 +732,8 @@
         "README.md",
         "SKILL.md"
       ],
-      "contentHash": "5914beeaf1aa1fe57cd95cf0afb60ee1cccc58eedaddd123a43cad32d6a70077"
+      "contentHash": "5914beeaf1aa1fe57cd95cf0afb60ee1cccc58eedaddd123a43cad32d6a70077",
+      "bundleHash": "2037075f3cfdfdb44e1c07b88977d0b2e04137ef077c8bb6a8a8741aa2d31a17"
     },
     {
       "name": "domain-identification-grouping",
@@ -720,7 +745,8 @@
         "README.md",
         "SKILL.md"
       ],
-      "contentHash": "ac3c94d9910a75aa6a61f7866507d16a3c646ff17e86b79667d1a19c6fa6c659"
+      "contentHash": "ac3c94d9910a75aa6a61f7866507d16a3c646ff17e86b79667d1a19c6fa6c659",
+      "bundleHash": "d8a480e1b7832339a398c1e4d06eb9d6e46de9f20de62c732e52bf30de325976"
     },
     {
       "name": "evolutionary-modular-architecture",
@@ -742,7 +768,8 @@
       ],
       "author": "Felipe Rodrigues - github.com/felipfr",
       "version": "1.0.0",
-      "contentHash": "67eab096727beddf61ab8df40629d63cbb5fa828bb1e1f12ab494af444ce9015"
+      "contentHash": "67eab096727beddf61ab8df40629d63cbb5fa828bb1e1f12ab494af444ce9015",
+      "bundleHash": "b48ab21cfc1f1ea5d56c51716d8132624d1803a16fcfb074939936d83bbe21d5"
     },
     {
       "name": "excalidraw-studio",
@@ -769,7 +796,8 @@
       ],
       "author": "Felipe Rodrigues - github.com/felipfr",
       "version": "1.0.1",
-      "contentHash": "08f4964859a421cccfc52314f2e5b3484b1163ecf558ccdbb6746127229b9399"
+      "contentHash": "08f4964859a421cccfc52314f2e5b3484b1163ecf558ccdbb6746127229b9399",
+      "bundleHash": "13466c931f33e4e98b62983443c3d951d78c64656c90a40c3634e9a84a6d97d2"
     },
     {
       "name": "expansion-retention",
@@ -781,7 +809,8 @@
       ],
       "author": "Chad Boyda / agent-gtm-skills",
       "version": "1.0.0",
-      "contentHash": "e5420a123058969e8e5014d74120daf7a1c598e1fb44e6d152c6b60a71a81e95"
+      "contentHash": "e5420a123058969e8e5014d74120daf7a1c598e1fb44e6d152c6b60a71a81e95",
+      "bundleHash": "f26921c7023ca4bb658fd2f6972fac4c2d72a5478942a1dcddce2b69c9d67fa3"
     },
     {
       "name": "figma",
@@ -797,6 +826,7 @@
       "author": "github.com/openai/skills",
       "version": "1.0.0",
       "contentHash": "eac820ebf3abdeaa88f3bfe16e53ec1c96a965a013fde9184381354bdba869b1",
+      "bundleHash": "67e0cff42e11d11632d1494ab89bc0ac54849b77515b70c1a904bbada120b58a",
       "permissions": {
         "filesystem": {
           "read": true,
@@ -830,7 +860,8 @@
       ],
       "author": "github.com/openai/skills",
       "version": "1.0.0",
-      "contentHash": "6177778eac45026cf58d1f86447fa730e39389e54a99df2c5f35cd6905371b1d"
+      "contentHash": "6177778eac45026cf58d1f86447fa730e39389e54a99df2c5f35cd6905371b1d",
+      "bundleHash": "6fb49678257b4d4dd70fc556b46eb421fb0c549be59f50f5f33f9c713e94252b"
     },
     {
       "name": "frontend-blueprint",
@@ -845,7 +876,8 @@
       ],
       "author": "Felipe Rodrigues - github.com/felipfr",
       "version": "1.0.0",
-      "contentHash": "c79c5acbf69e88e1b0c848e64afb671f33091e32b6dcb1b2e6f9c78213a10ec3"
+      "contentHash": "c79c5acbf69e88e1b0c848e64afb671f33091e32b6dcb1b2e6f9c78213a10ec3",
+      "bundleHash": "0da504b2814f214b447e6d38cf9bcbe4e394757b319f41c4e492778b06017e53"
     },
     {
       "name": "frontend-design",
@@ -864,7 +896,8 @@
       ],
       "author": "Impeccable (Paul Bakaus), based on Anthropic frontend-design",
       "version": "1.0.0",
-      "contentHash": "b20162c8d6bcdd9137c4afceaeb4f9dce2c1ba3ccb57a96a3228b8cb33104ec4"
+      "contentHash": "b20162c8d6bcdd9137c4afceaeb4f9dce2c1ba3ccb57a96a3228b8cb33104ec4",
+      "bundleHash": "5e606a0c9623503c2b2a9a4ca40563c944f2a8f49ebfe56be3398b6e8662911a"
     },
     {
       "name": "gh-address-comments",
@@ -882,6 +915,7 @@
       "author": "github.com/openai/skills",
       "version": "1.0.0",
       "contentHash": "49ca5d63e8981c8b3d86a790a4024946267463cf200779ed457fa1aba0151d5d",
+      "bundleHash": "0b309ccc660195d889f45cd2c852be57ce7738fb9ed773a46832c6426710a59e",
       "compatibility": {
         "claude-code": {
           "status": "tested"
@@ -900,7 +934,8 @@
       ],
       "author": "github.com/openai/skills",
       "version": "1.0.0",
-      "contentHash": "f032610bcbf7f7a7b6b13d20de360608c10328b7a9e507610323e843d613f1f4"
+      "contentHash": "f032610bcbf7f7a7b6b13d20de360608c10328b7a9e507610323e843d613f1f4",
+      "bundleHash": "d9625b027a1ae9357f622aa7910473e84e6732eaf497b09956fcb379a1d7e174"
     },
     {
       "name": "gtm-engineering",
@@ -914,7 +949,8 @@
       ],
       "author": "Chad Boyda / agent-gtm-skills",
       "version": "1.0.0",
-      "contentHash": "b2cfbea2da9f2a52527f6c41f128df2dba76c33df90692357a5533c06b78223f"
+      "contentHash": "b2cfbea2da9f2a52527f6c41f128df2dba76c33df90692357a5533c06b78223f",
+      "bundleHash": "3c4ef545c56ff9071a2500d036245396edbcfc2473c926ffe39ab7404eac58b1"
     },
     {
       "name": "gtm-metrics",
@@ -926,7 +962,8 @@
       ],
       "author": "Chad Boyda / agent-gtm-skills",
       "version": "1.0.0",
-      "contentHash": "9f2afa96826b0456cf79f05b43ab4470fd6802990e301bb898c2cbaa6f01cf5c"
+      "contentHash": "9f2afa96826b0456cf79f05b43ab4470fd6802990e301bb898c2cbaa6f01cf5c",
+      "bundleHash": "938308317405bb6ab1b3f429e1cbde8caf20a37304af202d25bcacc1f2d6cf5e"
     },
     {
       "name": "harness-eval",
@@ -949,7 +986,8 @@
       ],
       "author": "Tech Leads Club - github.com/tech-leads-club",
       "version": "1.8.3",
-      "contentHash": "675761f3fdb123f26103811ffe52e384adff5ffdf7c603578dfaa4eb2e54b2a2"
+      "contentHash": "675761f3fdb123f26103811ffe52e384adff5ffdf7c603578dfaa4eb2e54b2a2",
+      "bundleHash": "810a221013d975080783ae647529a572418e8080ceda3a45c2f52de97a51b5d0"
     },
     {
       "name": "jira-assistant",
@@ -960,7 +998,8 @@
         "README.md",
         "SKILL.md"
       ],
-      "contentHash": "fa63880889d2206548e33489a0ac1aa849c4e6ab879ea769c2715521a8231c8a"
+      "contentHash": "fa63880889d2206548e33489a0ac1aa849c4e6ab879ea769c2715521a8231c8a",
+      "bundleHash": "7452a47803ba80f07a06461405cefef6aa8c447ead6d892e16d3bb277607963c"
     },
     {
       "name": "lead-enrichment",
@@ -973,7 +1012,8 @@
       ],
       "author": "Chad Boyda / agent-gtm-skills",
       "version": "1.0.0",
-      "contentHash": "c062dadf96d7a1500457c222b95baff7f5aade66486044be360a13268b251940"
+      "contentHash": "c062dadf96d7a1500457c222b95baff7f5aade66486044be360a13268b251940",
+      "bundleHash": "ceb20c48873fe05cc48feb6ee2bc79ee57f2d457a180c1c62c2979ed6c6edf54"
     },
     {
       "name": "learning-opportunities",
@@ -986,7 +1026,8 @@
       ],
       "author": "Chris Hicks",
       "version": "1.1.0",
-      "contentHash": "47c4d62eebf29a61477c1b611c6ae360b028e1e23e09df1f6a33b5ff32b020f7"
+      "contentHash": "47c4d62eebf29a61477c1b611c6ae360b028e1e23e09df1f6a33b5ff32b020f7",
+      "bundleHash": "5f91fac441c5ac4f2c805d7919d53410bc6a4b3c0e7c81aa53d9e764acd5f088"
     },
     {
       "name": "legacy-migration-planner",
@@ -1004,7 +1045,8 @@
       ],
       "author": "Felipe Rodrigues - github.com/felipfr",
       "version": "1.0.0",
-      "contentHash": "e73e55256768767436943c8948da0d6a0667282c7195a47119841b5e76263d02"
+      "contentHash": "e73e55256768767436943c8948da0d6a0667282c7195a47119841b5e76263d02",
+      "bundleHash": "6f20d8a77093f687de55532f827ecd2955f8a39786362f8997c847512de6b125"
     },
     {
       "name": "mermaid-studio",
@@ -1028,7 +1070,8 @@
       ],
       "author": "Felipe Rodrigues - github.com/felipfr",
       "version": "1.0.1",
-      "contentHash": "8a240b980cee9287a20ec6ea1e4837c5d6e43c756ab17fcebbf6b1087a609815"
+      "contentHash": "8a240b980cee9287a20ec6ea1e4837c5d6e43c756ab17fcebbf6b1087a609815",
+      "bundleHash": "1b41e27bbb38a4fb0b8fc7f38c8b4d2a40daf611ee66bea1fa82e2d2cd7f88d7"
     },
     {
       "name": "modular-decomposition",
@@ -1050,7 +1093,8 @@
         "references/pattern-05-domain-grouping-quick-reference.md",
         "references/pattern-05-domain-grouping.md"
       ],
-      "contentHash": "b536c1851c862516e5fc111502311343b952073a992ea07c9f8f9b42fbbc2a44"
+      "contentHash": "b536c1851c862516e5fc111502311343b952073a992ea07c9f8f9b42fbbc2a44",
+      "bundleHash": "fc61a4dea1fbf271c96acc7986e9ba3904f133d2c079e142f64444bb0369225c"
     },
     {
       "name": "modular-design-principles",
@@ -1061,7 +1105,8 @@
         "SKILL.md",
         "references/principles.md"
       ],
-      "contentHash": "d53fdca7ae18205376956c39a3a1729edfae843f63e5f2a6c5dd2c64ccd8a576"
+      "contentHash": "d53fdca7ae18205376956c39a3a1729edfae843f63e5f2a6c5dd2c64ccd8a576",
+      "bundleHash": "6b38d1d03f1097a0b24a767f5ca8c48bc27cd179c8040c9d61ffbbd52783a8cc"
     },
     {
       "name": "multi-platform-launch",
@@ -1075,7 +1120,8 @@
       ],
       "author": "Chad Boyda / agent-gtm-skills",
       "version": "1.0.0",
-      "contentHash": "22552e0a3fde93c57715295f52b31d0695ad78d10512e5793ea93c7b138c79ee"
+      "contentHash": "22552e0a3fde93c57715295f52b31d0695ad78d10512e5793ea93c7b138c79ee",
+      "bundleHash": "2fbb7ea5fbee4be68371cab7eea3e9557bfd722da8579a74cf2020a8b6bee42e"
     },
     {
       "name": "nestjs-modular-monolith",
@@ -1094,7 +1140,8 @@
       ],
       "author": "Felipe Rodrigues - github.com/felipfr",
       "version": "1.0.0",
-      "contentHash": "a4e6b084d0cb6ed7a06abc6786cea67292440c5b7e63ed33baed9ecb7525bbeb"
+      "contentHash": "a4e6b084d0cb6ed7a06abc6786cea67292440c5b7e63ed33baed9ecb7525bbeb",
+      "bundleHash": "c0c2db0ca204628068cb4e972cbfcc33466afccd273121e2805d917ac6f6b979"
     },
     {
       "name": "netlify-deploy",
@@ -1110,7 +1157,8 @@
       ],
       "author": "github.com/openai/skills",
       "version": "1.0.0",
-      "contentHash": "a85452537b4a35077d259ed06661d16fb026d252e4b952b2fe82f2a006f39a15"
+      "contentHash": "a85452537b4a35077d259ed06661d16fb026d252e4b952b2fe82f2a006f39a15",
+      "bundleHash": "9b0ea5600d56380c29053b8c16e19955efe8696ada971a126147657be81f0c57"
     },
     {
       "name": "not-your-babysitter",
@@ -1122,7 +1170,8 @@
       ],
       "author": "Felipe Rodrigues - github.com/felipfr",
       "version": "1.0.0",
-      "contentHash": "bba71735a9fb5ac0154a38d7a8c817b16f2a61ed1a8e1d04ce46673c775effab"
+      "contentHash": "bba71735a9fb5ac0154a38d7a8c817b16f2a61ed1a8e1d04ce46673c775effab",
+      "bundleHash": "ca9b0fb6970adcb0ecf316c5665db344b8a28c5744126c19830ef5b4cb1ee718"
     },
     {
       "name": "nx-ci-monitor",
@@ -1133,6 +1182,7 @@
         "SKILL.md"
       ],
       "contentHash": "225060a6d1a31540b6a2bde26830652237603b625e887f311be8d313a36c10de",
+      "bundleHash": "c1bc6704a0d1ab321adcb18d14e38d3ac965b135b349026cd6b66002a066953d",
       "permissions": {
         "filesystem": {
           "read": true,
@@ -1160,7 +1210,8 @@
       "files": [
         "SKILL.md"
       ],
-      "contentHash": "b975e1a0caa6cc9922ba941e0746a2f141c708e41c8bbddb395d40e3efecf2a0"
+      "contentHash": "b975e1a0caa6cc9922ba941e0746a2f141c708e41c8bbddb395d40e3efecf2a0",
+      "bundleHash": "aa8a04c842f92cbc94e491e5cd99a18e87fadf70d3fb461b2bdffe5a80110781"
     },
     {
       "name": "nx-run-tasks",
@@ -1170,7 +1221,8 @@
       "files": [
         "SKILL.md"
       ],
-      "contentHash": "3c4d49d795b02e6a4a82606891a7da4773c3bc1ef883c1b980ac17596883397f"
+      "contentHash": "3c4d49d795b02e6a4a82606891a7da4773c3bc1ef883c1b980ac17596883397f",
+      "bundleHash": "afee898c08092a23088b6ee878882ebdee75786d88c4755452079d2d202cd6ab"
     },
     {
       "name": "nx-workspace",
@@ -1184,7 +1236,8 @@
         "reference/commands.md",
         "reference/configuration.md"
       ],
-      "contentHash": "410aad2cc5a3cdaf3ffc04b0a4ad893f6cf2f5babdd836e6eda68f409d3c7bf6"
+      "contentHash": "410aad2cc5a3cdaf3ffc04b0a4ad893f6cf2f5babdd836e6eda68f409d3c7bf6",
+      "bundleHash": "88b6518158125157ccbda76f7da0d5aaecc31cadcc24c342acb6d1da55820c73"
     },
     {
       "name": "paid-creative-ai",
@@ -1197,7 +1250,8 @@
       ],
       "author": "Chad Boyda / agent-gtm-skills",
       "version": "1.0.0",
-      "contentHash": "89328ab72ff4336917031a217f43bd19b133a7d17202bf70d8d8d7f59d69ce29"
+      "contentHash": "89328ab72ff4336917031a217f43bd19b133a7d17202bf70d8d8d7f59d69ce29",
+      "bundleHash": "5513e999d0318361855a57f63eaece317c92dcd12f5c2cc430ee7b4e6812986f"
     },
     {
       "name": "partner-affiliate",
@@ -1211,7 +1265,8 @@
       ],
       "author": "Chad Boyda / agent-gtm-skills",
       "version": "1.0.0",
-      "contentHash": "3ff5e89d89da30e46eef1d6fa4379aa1b41c30be16e2ca761a5581267c41561e"
+      "contentHash": "3ff5e89d89da30e46eef1d6fa4379aa1b41c30be16e2ca761a5581267c41561e",
+      "bundleHash": "a8dccc9a8934a98e8f9756fd3fc4e7eb86da70382be85de997693b97cff53e23"
     },
     {
       "name": "perf-astro",
@@ -1221,7 +1276,8 @@
       "files": [
         "SKILL.md"
       ],
-      "contentHash": "11b50b27564085d9bff6d558bd4e9f31e5bce3c9a82af4c7203d9a4cd1ff43e4"
+      "contentHash": "11b50b27564085d9bff6d558bd4e9f31e5bce3c9a82af4c7203d9a4cd1ff43e4",
+      "bundleHash": "0886f694930463ef4327939419fe5b32ca9d0176e22cf645d172653a88c59751"
     },
     {
       "name": "perf-lighthouse",
@@ -1231,7 +1287,8 @@
       "files": [
         "SKILL.md"
       ],
-      "contentHash": "2ef96cebc94fda975a7bba9e37511bff65739c91e61b950be0bd3048b8c9760d"
+      "contentHash": "2ef96cebc94fda975a7bba9e37511bff65739c91e61b950be0bd3048b8c9760d",
+      "bundleHash": "3611a9d8725cf98202ac8e46e04c660010be1acd43f9d75f5e6946852b8eeb3d"
     },
     {
       "name": "perf-web-optimization",
@@ -1244,7 +1301,8 @@
         "references/core-web-vitals.md",
         "references/image-optimization.md"
       ],
-      "contentHash": "864bb35d6ec7e7755181886b57709b76d8b5da5181a6d8480cd412dd772f1ffb"
+      "contentHash": "864bb35d6ec7e7755181886b57709b76d8b5da5181a6d8480cd412dd772f1ffb",
+      "bundleHash": "1538b338bd54bb663034ac22aca35ad3daf897943dc65529fb14d906281f37b6"
     },
     {
       "name": "playwright-skill",
@@ -1258,7 +1316,8 @@
         "package.json",
         "run.js"
       ],
-      "contentHash": "9c45020d33af9ac2d44c89721f154c94bd73b9d8590117597b9a26920ff9cecc"
+      "contentHash": "9c45020d33af9ac2d44c89721f154c94bd73b9d8590117597b9a26920ff9cecc",
+      "bundleHash": "13b2e51bb102e2a30803773e8cfb76587056742ae1eca945ba392e34d5be4284"
     },
     {
       "name": "positioning-icp",
@@ -1271,7 +1330,8 @@
       ],
       "author": "Chad Boyda / agent-gtm-skills",
       "version": "1.0.0",
-      "contentHash": "3b940bcd8ad2035177bffb04e34d52fe038f669a2d466e8d67e73135044373a5"
+      "contentHash": "3b940bcd8ad2035177bffb04e34d52fe038f669a2d466e8d67e73135044373a5",
+      "bundleHash": "1e24e68702d59db2e606ecda67e4c41aa52f8043559c4f330bd1c70ac7f3aa86"
     },
     {
       "name": "rails-dev",
@@ -1307,7 +1367,8 @@
       ],
       "author": "William Calderipe - github.com/wcalderipe",
       "version": "1.0.0",
-      "contentHash": "472d78e9b2b7a55d696be5c96196ec8ecb8967e12469456b79acbe84c1db8098"
+      "contentHash": "472d78e9b2b7a55d696be5c96196ec8ecb8967e12469456b79acbe84c1db8098",
+      "bundleHash": "e2e04703feea6b86b12555e9b6befda1f8b626c4ba2d9a9ba18472837e3de621"
     },
     {
       "name": "react-best-practices",
@@ -1380,7 +1441,8 @@
       ],
       "author": "vercel",
       "version": "1.0.0",
-      "contentHash": "e96f99e13dc2acc75efc1793aee08fe244802a97a4e190af38bd5a871a5c9636"
+      "contentHash": "e96f99e13dc2acc75efc1793aee08fe244802a97a4e190af38bd5a871a5c9636",
+      "bundleHash": "b2a2d105e44ba78511a25cb6710287fbf805ac065b1636776d1de377795edfb8"
     },
     {
       "name": "react-composition-patterns",
@@ -1404,7 +1466,8 @@
       ],
       "author": "vercel",
       "version": "1.0.0",
-      "contentHash": "171c6a35a0a74a6b37facf2a6e3883a02f53e3f2d429e6aa5834412c65d38dc7"
+      "contentHash": "171c6a35a0a74a6b37facf2a6e3883a02f53e3f2d429e6aa5834412c65d38dc7",
+      "bundleHash": "0dfde662a4887f0eb6ff5c5ad806eadb883b136acc5504da9c0cbe3f3d618857"
     },
     {
       "name": "react-native-expert",
@@ -1421,7 +1484,8 @@
       ],
       "author": "Felipe Rodrigues - github.com/felipfr",
       "version": "1.0.0",
-      "contentHash": "9da108258c0a93cd04b57d94a5a7788e6c37c704ca4322ca9b6bedce8e3ff683"
+      "contentHash": "9da108258c0a93cd04b57d94a5a7788e6c37c704ca4322ca9b6bedce8e3ff683",
+      "bundleHash": "010243075e2cf54d837b4041266fdd1752c3bbd75bcaade8eb1721bb5ff1afa8"
     },
     {
       "name": "render-deploy",
@@ -1445,6 +1509,7 @@
       "author": "github.com/openai/skills",
       "version": "1.0.0",
       "contentHash": "faab47e32bc535ce51e7b54acaf6a3367be54f720d2525aa68a1cc8caf26a001",
+      "bundleHash": "6fa4e31b3bef9d90302338579268e0ce9e9ce97ca9c48823fddd4327d86aac42",
       "permissions": {
         "filesystem": {
           "read": true,
@@ -1473,7 +1538,8 @@
       ],
       "author": "Chad Boyda / agent-gtm-skills",
       "version": "1.0.0",
-      "contentHash": "8f9829a2107c994a3a4d2fcaec73def4bcc1a7fac20c64b452093a4e7018e93f"
+      "contentHash": "8f9829a2107c994a3a4d2fcaec73def4bcc1a7fac20c64b452093a4e7018e93f",
+      "bundleHash": "6bff5c6a95dd486adb6948498f9c83332f16e2bb0f8be143e6c89b4c77b087b2"
     },
     {
       "name": "security-best-practices",
@@ -1496,7 +1562,8 @@
       ],
       "author": "github.com/openai/skills",
       "version": "1.0.0",
-      "contentHash": "6fec09f7e43bb297ad6097e13469e85aa5b5d671a839b4f7e7871ef8eaa76c4e"
+      "contentHash": "6fec09f7e43bb297ad6097e13469e85aa5b5d671a839b4f7e7871ef8eaa76c4e",
+      "bundleHash": "3a8a209005a50d78d3aa26e0f2adb552fc256d5ee56929503b24f686b13dee82"
     },
     {
       "name": "security-ownership-map",
@@ -1514,7 +1581,8 @@
       ],
       "author": "github.com/openai/skills",
       "version": "1.0.0",
-      "contentHash": "d6231f21029bc14fc776dbef909f631a6b39d7d1b46b11b25dbfe51c51dd7141"
+      "contentHash": "d6231f21029bc14fc776dbef909f631a6b39d7d1b46b11b25dbfe51c51dd7141",
+      "bundleHash": "31a010aceb84640f44ed1a30c9667889186754e4f20b84b066c4a5aaf25bc76b"
     },
     {
       "name": "security-threat-model",
@@ -1533,6 +1601,7 @@
       "author": "github.com/openai/skills",
       "version": "1.0.0",
       "contentHash": "625c01a0ca48876bf57128dbfc36775c9aecd82d594a297b78d03fc4336a4505",
+      "bundleHash": "08fb6e866cc2cf60438328198527c2eb484e0b8d722b99f091bd432e14fbc192",
       "compatibility": {
         "codex": {
           "status": "tested"
@@ -1551,7 +1620,8 @@
       ],
       "author": "github.com/openai/skills",
       "version": "1.0.0",
-      "contentHash": "aa0e533aff9a319b0aef86ad3e543f61b812bf159c27fc9ebb1c7ad97d5db937"
+      "contentHash": "aa0e533aff9a319b0aef86ad3e543f61b812bf159c27fc9ebb1c7ad97d5db937",
+      "bundleHash": "3abcc7c781fd0a9e9fff3236c0bac401e57968d7ef2fef4b38b777316e4bf51e"
     },
     {
       "name": "seo",
@@ -1563,7 +1633,8 @@
       ],
       "author": "web-quality-skills",
       "version": "1.0",
-      "contentHash": "fc9897a3923b5e23e00545ac67f4c8c2b6903113bd5f046cda259c98a0f3cd40"
+      "contentHash": "fc9897a3923b5e23e00545ac67f4c8c2b6903113bd5f046cda259c98a0f3cd40",
+      "bundleHash": "577fa588c7f9c002b1f03169ff97274da0510fc0f05d4dc5b078fc5868b6634a"
     },
     {
       "name": "shopify-developer",
@@ -1584,7 +1655,8 @@
         "references/performance.md",
         "references/theme-development.md"
       ],
-      "contentHash": "10dd4806c0061bb9e89914557f6aec6badcef893e601293711ba3e8993527e9f"
+      "contentHash": "10dd4806c0061bb9e89914557f6aec6badcef893e601293711ba3e8993527e9f",
+      "bundleHash": "83d8683cecf3020b245f5db89041a3f05b969f4c60af8a8de5692612a94392ec"
     },
     {
       "name": "skill-architect",
@@ -1600,7 +1672,8 @@
       ],
       "author": "Felipe Rodrigues - github.com/felipfr",
       "version": "1.0.0",
-      "contentHash": "349b256153447631c3ed356996c3a62fec52493d07ba75e37b12c458f9fbf6bb"
+      "contentHash": "349b256153447631c3ed356996c3a62fec52493d07ba75e37b12c458f9fbf6bb",
+      "bundleHash": "e6acf464099ca9d7abd4c0ce17422a924b3abac515ccce95be4575a89b272a37"
     },
     {
       "name": "social-selling",
@@ -1613,6 +1686,7 @@
       "author": "Chad Boyda / agent-gtm-skills",
       "version": "1.0.0",
       "contentHash": "0f4f9229b6b3b3c465e754498cd702b3b93ccc01d556b9fb0a48fa86d36e5c73",
+      "bundleHash": "78959f80e19f47fe3f4b1ce69156d98e6dad3efb40415af08c898a4b7e31f36d",
       "permissions": {
         "filesystem": {
           "read": false,
@@ -1640,7 +1714,8 @@
       ],
       "author": "Chad Boyda / agent-gtm-skills",
       "version": "1.0.0",
-      "contentHash": "95d71f10ea8a48767cb871ad72c09745cb6ecd822ed71be659cbd960b6503445"
+      "contentHash": "95d71f10ea8a48767cb871ad72c09745cb6ecd822ed71be659cbd960b6503445",
+      "bundleHash": "5976c58891fe3ed0857f715310f17e415562adabdae26c87d7c59943100f7ac9"
     },
     {
       "name": "spec-driven-eval",
@@ -1654,7 +1729,8 @@
       ],
       "author": "Waldemar Neto - github.com/waldemarnt",
       "version": "1.0.0",
-      "contentHash": "168d6860c6e84809a02c2abface032a4a625bdd81fec6131615e00a2cf87e311"
+      "contentHash": "168d6860c6e84809a02c2abface032a4a625bdd81fec6131615e00a2cf87e311",
+      "bundleHash": "a9194596281d61002fc9b09f6de53b88310a67ca5040d8d2d6953a124985ee50"
     },
     {
       "name": "subagent-creator",
@@ -1664,7 +1740,8 @@
       "files": [
         "SKILL.md"
       ],
-      "contentHash": "bef6b5a9f23b3186af259c1041c2561e9af15fa94810009d72d775bb217aa3ca"
+      "contentHash": "bef6b5a9f23b3186af259c1041c2561e9af15fa94810009d72d775bb217aa3ca",
+      "bundleHash": "98099857beb0b506cc2fd24670cfd067ebfad358b27096ff500f9644cc7e60ea"
     },
     {
       "name": "tactical-ddd",
@@ -1677,7 +1754,8 @@
         "refactoring.md",
         "reference.md"
       ],
-      "contentHash": "c3dfaf45e8cb784f18d9c460c7f005c4ee9dbb430f21ee8af6913bbfea66a75b"
+      "contentHash": "c3dfaf45e8cb784f18d9c460c7f005c4ee9dbb430f21ee8af6913bbfea66a75b",
+      "bundleHash": "7a0d4a23ccbe4555fe5ad15b1013935ed5f5a7ce2e6014d1a84fd194e825127c"
     },
     {
       "name": "technical-design-doc-creator",
@@ -1688,7 +1766,8 @@
         "README.md",
         "SKILL.md"
       ],
-      "contentHash": "d05974df076f695f96b4e4c263ad19f2aaffe8ee6248c1b07a634dd9ed0ea51e"
+      "contentHash": "d05974df076f695f96b4e4c263ad19f2aaffe8ee6248c1b07a634dd9ed0ea51e",
+      "bundleHash": "12c50dec05fcf968836571bacbf659dbbb428eb46dc87b2fa39a33055203e6e2"
     },
     {
       "name": "the-fool",
@@ -1707,7 +1786,8 @@
       ],
       "author": "https://github.com/Jeffallan",
       "version": "2.0.0",
-      "contentHash": "4468f89ea05bfdea7a9346bebae5358bcf80ff4a51e6f59195b7312186fe0718"
+      "contentHash": "4468f89ea05bfdea7a9346bebae5358bcf80ff4a51e6f59195b7312186fe0718",
+      "bundleHash": "5c999fad0af3b8a40918edbd22e99eb68f9cd9a9b8740c7ca2693a507beae96d"
     },
     {
       "name": "the-judge",
@@ -1724,7 +1804,8 @@
       ],
       "author": "Felipe Rodrigues - github.com/felipfr",
       "version": "1.4.0",
-      "contentHash": "05526209052f6592ad98476e8f59e9ffa2a24e803e10a90ceac659476b509403"
+      "contentHash": "05526209052f6592ad98476e8f59e9ffa2a24e803e10a90ceac659476b509403",
+      "bundleHash": "12258131e93d7d52d73dcaaa04fa30ed6a1b8a6aeb0a98f1908e6f644d3e56d7"
     },
     {
       "name": "the-jury",
@@ -1739,7 +1820,8 @@
       ],
       "author": "Felipe Rodrigues - github.com/felipfr",
       "version": "1.0.0",
-      "contentHash": "04b3931496ca41463620a960aee92babac280987d7621a9ab80f7d9ee158d229"
+      "contentHash": "04b3931496ca41463620a960aee92babac280987d7621a9ab80f7d9ee158d229",
+      "bundleHash": "dcbf4cc691227cd743e441af912d30aace19c7063934856a408f987458048c08"
     },
     {
       "name": "tlc-discover",
@@ -1752,7 +1834,8 @@
       ],
       "author": "Tech Leads Club - github.com/tech-leads-club",
       "version": "0.8.0",
-      "contentHash": "a00cd1b2c150cd274f8207ae2fb22af25926ba550ad20d5100131efeaad0bfd8"
+      "contentHash": "a00cd1b2c150cd274f8207ae2fb22af25926ba550ad20d5100131efeaad0bfd8",
+      "bundleHash": "3ff815864645985058125f2d4b1b3ef896cbb6cbb2b72a22debc2b5ba39d8de8"
     },
     {
       "name": "tlc-generative-engine-optimization",
@@ -1772,7 +1855,8 @@
       ],
       "author": "Fernando Paladini - github.com/paladini",
       "version": "1.0.0",
-      "contentHash": "0ffb82a6d58cbb4f7f265a29601971bd302322ef89c4392f25278376200596df"
+      "contentHash": "0ffb82a6d58cbb4f7f265a29601971bd302322ef89c4392f25278376200596df",
+      "bundleHash": "acfdc69dfd1a7909c2534cffb56309ed47734fab36dac108a8c5c524c89e5afe"
     },
     {
       "name": "tlc-implement",
@@ -1788,7 +1872,8 @@
       ],
       "author": "Tech Leads Club - github.com/tech-leads-club",
       "version": "0.1.0",
-      "contentHash": "b3bbd69d067b042072e9538ea5edc90db28b0873fdf4d86157ca4ae5363bfd9e"
+      "contentHash": "b3bbd69d067b042072e9538ea5edc90db28b0873fdf4d86157ca4ae5363bfd9e",
+      "bundleHash": "703cae1e5161f1b1359eb727a3921e26d8444f1eb38cd51e63d44b6f03adec96"
     },
     {
       "name": "tlc-plan",
@@ -1801,7 +1886,8 @@
       ],
       "author": "Tech Leads Club - github.com/tech-leads-club",
       "version": "0.2.0",
-      "contentHash": "428b064742db100add4d42612ce61eaed040aad87e6718e494a09ad9ae03552b"
+      "contentHash": "428b064742db100add4d42612ce61eaed040aad87e6718e494a09ad9ae03552b",
+      "bundleHash": "bcb8b57980187656ba3cef9eba171d1fa79fae2d1aa715827ec23921373ee105"
     },
     {
       "name": "tlc-spec-driven",
@@ -1830,7 +1916,8 @@
       ],
       "author": "Felipe Rodrigues - github.com/felipfr",
       "version": "3.3.0",
-      "contentHash": "9f4c793556001f3210a2d9fe3b41bf24e82e581c522d8dd50f65addfee169a29"
+      "contentHash": "9f4c793556001f3210a2d9fe3b41bf24e82e581c522d8dd50f65addfee169a29",
+      "bundleHash": "cd235539919eea33f9767a11c70a5e713abd218d7845b08d554163f6f2d79c16"
     },
     {
       "name": "tlc-spec-lean",
@@ -1856,7 +1943,8 @@
       ],
       "author": "Tech Leads Club - github.com/tech-leads-club",
       "version": "1.0.0",
-      "contentHash": "af264d73172a488bab93cb76366df411cee8631800480fbca4add00dd72bbd8b"
+      "contentHash": "af264d73172a488bab93cb76366df411cee8631800480fbca4add00dd72bbd8b",
+      "bundleHash": "564e304d3372cc1351bbc5c81373012b76594c601607e5cef8de8dc2fae91e1b"
     },
     {
       "name": "vercel-deploy",
@@ -1870,7 +1958,8 @@
       ],
       "author": "github.com/openai/skills",
       "version": "1.0.0",
-      "contentHash": "53985dad8a6cf5571b8eb796668502f2e82f0574ab15d31609486de8317f0ec5"
+      "contentHash": "53985dad8a6cf5571b8eb796668502f2e82f0574ab15d31609486de8317f0ec5",
+      "bundleHash": "79ee81bf721bd87c6506d90cba144bc9922d67cc99469cfdedfe511cf3d89918"
     },
     {
       "name": "video-outreach",
@@ -1882,7 +1971,8 @@
       ],
       "author": "Chad Boyda / agent-gtm-skills",
       "version": "1.0.0",
-      "contentHash": "b918e2c62adf317b82ac43e4731e300ff4f163383aebe7ae8532f7ea69c24c29"
+      "contentHash": "b918e2c62adf317b82ac43e4731e300ff4f163383aebe7ae8532f7ea69c24c29",
+      "bundleHash": "0b9fbf613998d3c0eb417c6ec0804d1a8e7bde6fcb1abeafe5a397f4f811057d"
     },
     {
       "name": "web-design-guidelines",
@@ -1895,7 +1985,8 @@
       ],
       "author": "vercel",
       "version": "1.0.0",
-      "contentHash": "213a23fff251b12ddfec648bda148bf10704ef6617e162eb9329cc83963dd138"
+      "contentHash": "213a23fff251b12ddfec648bda148bf10704ef6617e162eb9329cc83963dd138",
+      "bundleHash": "0dfe373501e4639a4d0d705661ec1d0436d56d073eaa7b70466cffed016d337c"
     },
     {
       "name": "web-quality-audit",
@@ -1908,7 +1999,8 @@
       ],
       "author": "web-quality-skills",
       "version": "1.0",
-      "contentHash": "8af5bd3453984bdcef903709b6ef0606b12ae1badb6dd5b5b382b930d2594d7c"
+      "contentHash": "8af5bd3453984bdcef903709b6ef0606b12ae1badb6dd5b5b382b930d2594d7c",
+      "bundleHash": "d25eac1b1da5fdbbdbc76ab7389d478e588e4e215b3a49e44ceacd7eb9c5bc7e"
     }
   ],
   "deprecated": [
