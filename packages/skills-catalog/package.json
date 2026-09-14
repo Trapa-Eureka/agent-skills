@@ -18,6 +18,7 @@
     "skills/"
   ],
   "devDependencies": {
-    "chalk": "^5.6.2"
+    "chalk": "^5.6.2",
+    "sigstore": "^4.1.1"
   }
 }

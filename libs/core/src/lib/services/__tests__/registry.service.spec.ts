@@ -9,6 +9,7 @@ import type {
   PackageResolverPort,
   PathsPort,
   ShellPort,
+  SignatureVerifierPort,
 } from '../../ports'
 import type { SkillsRegistry } from '../../types'
 
@@ -49,9 +50,14 @@ type TestPorts = {
       fallbackUrl?: string,
     ) => Promise<{ ok: boolean; status: number; json(): Promise<unknown>; text(): Promise<string> }>
   >
+  getMock: jest.MockedFunction<
+    (url: string) => Promise<{ ok: boolean; status: number; json(): Promise<unknown>; text(): Promise<string> }>
+  >
   getEnvMock: jest.MockedFunction<(key: string) => string | undefined>
   getLatestVersionMock: jest.MockedFunction<(packageName: string) => Promise<string>>
   loggerErrorMock: jest.MockedFunction<(message: string) => void>
+  loggerWarnMock: jest.MockedFunction<(message: string) => void>
+  signatureVerifyMock: jest.MockedFunction<SignatureVerifierPort['verify']>
 }
 
 const createPorts = (): TestPorts => {
@@ -68,9 +74,15 @@ const createPorts = (): TestPorts => {
         fallbackUrl?: string,
       ) => Promise<{ ok: boolean; status: number; json(): Promise<unknown>; text(): Promise<string> }>
     >()
+  const getMock =
+    jest.fn<
+      (url: string) => Promise<{ ok: boolean; status: number; json(): Promise<unknown>; text(): Promise<string> }>
+    >()
   const getEnvMock = jest.fn<(key: string) => string | undefined>()
   const getLatestVersionMock = jest.fn<(packageName: string) => Promise<string>>()
   const loggerErrorMock = jest.fn<(message: string) => void>()
+  const loggerWarnMock = jest.fn<(message: string) => void>()
+  const signatureVerifyMock = jest.fn<SignatureVerifierPort['verify']>()
 
   const virtualFs = new Map<string, string>()
 
@@ -92,6 +104,10 @@ const createPorts = (): TestPorts => {
   readdirSyncMock.mockReturnValue([])
   getEnvMock.mockImplementation((key) => (key === 'SKILLS_CDN_REF' ? 'main' : undefined))
   getLatestVersionMock.mockResolvedValue('9.9.9')
+  // Default: no signature bundle published — exercises the same "unverified, warn mode" path as
+  // every registry today (none are signed yet). Individual signature tests override this.
+  getMock.mockResolvedValue({ ok: false, status: 404, json: async () => ({}), text: async () => '' })
+  signatureVerifyMock.mockRejectedValue(new Error('no valid signature (default test fake)'))
 
   const fs = {
     existsSync: existsSyncMock,
@@ -104,6 +120,7 @@ const createPorts = (): TestPorts => {
 
   const http = {
     getWithFallback: getWithFallbackMock,
+    get: getMock,
   } as unknown as HttpPort
 
   const env = {
@@ -119,7 +136,7 @@ const createPorts = (): TestPorts => {
 
   const logger = {
     error: loggerErrorMock,
-    warn: jest.fn(),
+    warn: loggerWarnMock,
     info: jest.fn(),
     debug: jest.fn(),
   } as unknown as LoggerPort
@@ -136,6 +153,7 @@ const createPorts = (): TestPorts => {
       getLocalSkillsDirectory: jest.fn(() => null),
     } as unknown as PathsPort,
     shell: {} as ShellPort,
+    signatureVerifier: { verify: signatureVerifyMock },
   }
 
   return {
@@ -147,9 +165,12 @@ const createPorts = (): TestPorts => {
     writeFileSyncMock,
     readdirSyncMock,
     getWithFallbackMock,
+    getMock,
     getEnvMock,
     getLatestVersionMock,
     loggerErrorMock,
+    signatureVerifyMock,
+    loggerWarnMock,
   }
 }
 
@@ -303,6 +324,127 @@ describe('fetchRegistry', () => {
   })
 })
 
+describe('fetchRegistry signature verification', () => {
+  it('warn mode (default): proceeds and warns when no signature bundle is published', async () => {
+    const { ports, getWithFallbackMock, getMock, loggerWarnMock } = createPorts()
+    getWithFallbackMock.mockResolvedValue({
+      ok: true,
+      status: 200,
+      json: async () => registryFixture,
+      text: async () => JSON.stringify(registryFixture),
+    })
+    // getMock already defaults to 404 (no bundle) via createPorts()
+
+    const result = await fetchRegistry(ports)
+
+    expect(result).toEqual(registryFixture)
+    expect(loggerWarnMock).toHaveBeenCalledTimes(1)
+    expect(loggerWarnMock.mock.calls[0][0]).toContain('signature verification failed')
+    expect(getMock).toHaveBeenCalledTimes(1)
+  })
+
+  it('warn mode (default): proceeds and warns when the signature bundle fails verification', async () => {
+    const { ports, getWithFallbackMock, getMock, loggerWarnMock } = createPorts()
+    getWithFallbackMock.mockResolvedValue({
+      ok: true,
+      status: 200,
+      json: async () => registryFixture,
+      text: async () => JSON.stringify(registryFixture),
+    })
+    getMock.mockResolvedValue({
+      ok: true,
+      status: 200,
+      json: async () => ({ not: 'a real bundle' }),
+      text: async () => JSON.stringify({ not: 'a real bundle' }),
+    })
+
+    const result = await fetchRegistry(ports)
+
+    expect(result).toEqual(registryFixture)
+    expect(loggerWarnMock).toHaveBeenCalledTimes(1)
+  })
+
+  it('enforce mode: blocks and returns null when no signature bundle is published', async () => {
+    const { ports, getWithFallbackMock, getEnvMock, loggerErrorMock } = createPorts()
+    getEnvMock.mockImplementation((key) =>
+      key === 'SKILLS_CDN_REF' ? 'main' : key === 'SKILLS_REGISTRY_VERIFY' ? 'enforce' : undefined,
+    )
+    getWithFallbackMock.mockResolvedValue({
+      ok: true,
+      status: 200,
+      json: async () => registryFixture,
+      text: async () => JSON.stringify(registryFixture),
+    })
+
+    const result = await fetchRegistry(ports)
+
+    expect(result).toBeNull()
+    expect(loggerErrorMock).toHaveBeenCalledTimes(1)
+    expect(loggerErrorMock.mock.calls[0][0]).toContain('installation blocked')
+  })
+
+  it('enforce mode: does not fall back to a stale cache when verification fails', async () => {
+    const { ports, existsSyncMock, readFileSyncMock, getWithFallbackMock, getEnvMock } = createPorts()
+    getEnvMock.mockImplementation((key) =>
+      key === 'SKILLS_CDN_REF' ? 'main' : key === 'SKILLS_REGISTRY_VERIFY' ? 'enforce' : undefined,
+    )
+    existsSyncMock.mockImplementation(
+      (path) =>
+        path === '/home/tester/.cache/agent-skills' ||
+        path === '/home/tester/.cache/agent-skills/skills' ||
+        path === '/home/tester/.cache/agent-skills/registry.json',
+    )
+    const staleRegistry = { ...registryFixture, version: 'stale-cached' }
+    readFileSyncMock.mockReturnValue(JSON.stringify({ fetchedAt: Date.now() - 60_000 * 60, registry: staleRegistry }))
+    getWithFallbackMock.mockResolvedValue({
+      ok: true,
+      status: 200,
+      json: async () => registryFixture,
+      text: async () => JSON.stringify(registryFixture),
+    })
+
+    const result = await fetchRegistry(ports)
+
+    // Unlike a network/parse failure, a rejected signature must not silently degrade to a
+    // possibly-unverified cached registry — that would defeat the point of enforce mode.
+    expect(result).toBeNull()
+  })
+
+  it('proceeds without warning once a signature verifies (fake SignatureVerifierPort)', async () => {
+    const { ports, getWithFallbackMock, getMock, loggerWarnMock, loggerErrorMock, signatureVerifyMock } = createPorts()
+    signatureVerifyMock.mockResolvedValue(undefined)
+    getWithFallbackMock.mockResolvedValue({
+      ok: true,
+      status: 200,
+      json: async () => registryFixture,
+      text: async () => JSON.stringify(registryFixture),
+    })
+    getMock.mockResolvedValue({
+      ok: true,
+      status: 200,
+      json: async () => ({ mediaType: 'application/vnd.dev.sigstore.bundle+json;version=0.3' }),
+      text: async () => '{}',
+    })
+
+    const result = await fetchRegistry(ports)
+
+    expect(result).toEqual(registryFixture)
+    expect(loggerWarnMock).not.toHaveBeenCalled()
+    expect(loggerErrorMock).not.toHaveBeenCalled()
+    // Pinning identity is the actual security property — a Sigstore signature from any random
+    // repo's workflow must not verify, only the upstream release pipeline's.
+    expect(signatureVerifyMock).toHaveBeenCalledWith(
+      { mediaType: 'application/vnd.dev.sigstore.bundle+json;version=0.3' },
+      Buffer.from(JSON.stringify(registryFixture), 'utf-8'),
+      {
+        certificateIssuer: 'https://token.actions.githubusercontent.com',
+        certificateIdentityURI:
+          'https://github.com/tech-leads-club/agent-skills/.github/workflows/release.yml@refs/heads/main',
+      },
+    )
+  })
+})
+
 describe('downloadSkill', () => {
   it('downloads a skill and writes its files to the local cache', async () => {
     const { ports, getWithFallbackMock, writeFileSyncMock } = createPorts()
@@ -418,17 +560,18 @@ describe('remote registry listing', () => {
 
   it('returns sorted remote categories from the registry payload', async () => {
     const { ports, getWithFallbackMock } = createPorts()
+    const categoriesFixturePayload = {
+      ...registryFixture,
+      categories: {
+        testing: { name: 'Testing' },
+        quality: { name: 'Quality', description: 'Quality skills' },
+      },
+    }
     getWithFallbackMock.mockResolvedValue({
       ok: true,
       status: 200,
-      json: async () => ({
-        ...registryFixture,
-        categories: {
-          testing: { name: 'Testing' },
-          quality: { name: 'Quality', description: 'Quality skills' },
-        },
-      }),
-      text: async () => '',
+      json: async () => categoriesFixturePayload,
+      text: async () => JSON.stringify(categoriesFixturePayload),
     })
 
     const categories = await getRemoteCategories(ports)
@@ -473,20 +616,21 @@ describe('getSkillMetadata', () => {
 describe('deprecated registry entries', () => {
   it('returns deprecated skills from registry payload', async () => {
     const { ports, getWithFallbackMock } = createPorts()
+    const deprecatedFixturePayload = {
+      ...registryFixture,
+      deprecated: [
+        {
+          name: 'legacy-accessibility',
+          message: 'Use accessibility instead',
+          alternatives: ['accessibility'],
+        },
+      ],
+    }
     getWithFallbackMock.mockResolvedValue({
       ok: true,
       status: 200,
-      json: async () => ({
-        ...registryFixture,
-        deprecated: [
-          {
-            name: 'legacy-accessibility',
-            message: 'Use accessibility instead',
-            alternatives: ['accessibility'],
-          },
-        ],
-      }),
-      text: async () => '',
+      json: async () => deprecatedFixturePayload,
+      text: async () => JSON.stringify(deprecatedFixturePayload),
     })
 
     const deprecated = await getDeprecatedSkills(ports)
@@ -502,19 +646,20 @@ describe('deprecated registry entries', () => {
 
   it('returns a deprecated map keyed by skill name', async () => {
     const { ports, getWithFallbackMock } = createPorts()
+    const deprecatedMapFixturePayload = {
+      ...registryFixture,
+      deprecated: [
+        {
+          name: 'legacy-accessibility',
+          message: 'Use accessibility instead',
+        },
+      ],
+    }
     getWithFallbackMock.mockResolvedValue({
       ok: true,
       status: 200,
-      json: async () => ({
-        ...registryFixture,
-        deprecated: [
-          {
-            name: 'legacy-accessibility',
-            message: 'Use accessibility instead',
-          },
-        ],
-      }),
-      text: async () => '',
+      json: async () => deprecatedMapFixturePayload,
+      text: async () => JSON.stringify(deprecatedMapFixturePayload),
     })
 
     const deprecatedMap = await getDeprecatedMap(ports)
@@ -588,7 +733,7 @@ describe('update detection', () => {
       ok: true,
       status: 200,
       json: async () => ({ ...registryFixture, skills: [] }),
-      text: async () => '',
+      text: async () => JSON.stringify({ ...registryFixture, skills: [] }),
     })
 
     const shouldUpdate = await needsUpdate(ports, 'accessibility')
@@ -612,31 +757,32 @@ describe('update detection', () => {
       return ''
     })
 
+    const updateFixturePayload = {
+      ...registryFixture,
+      skills: [
+        {
+          name: 'alpha',
+          description: 'alpha',
+          category: 'quality',
+          path: '(quality)/alpha',
+          files: ['SKILL.md'],
+          contentHash: 'hash-alpha',
+        },
+        {
+          name: 'beta',
+          description: 'beta',
+          category: 'quality',
+          path: '(quality)/beta',
+          files: ['SKILL.md'],
+          contentHash: 'hash-beta',
+        },
+      ],
+    }
     getWithFallbackMock.mockResolvedValue({
       ok: true,
       status: 200,
-      json: async () => ({
-        ...registryFixture,
-        skills: [
-          {
-            name: 'alpha',
-            description: 'alpha',
-            category: 'quality',
-            path: '(quality)/alpha',
-            files: ['SKILL.md'],
-            contentHash: 'hash-alpha',
-          },
-          {
-            name: 'beta',
-            description: 'beta',
-            category: 'quality',
-            path: '(quality)/beta',
-            files: ['SKILL.md'],
-            contentHash: 'hash-beta',
-          },
-        ],
-      }),
-      text: async () => '',
+      json: async () => updateFixturePayload,
+      text: async () => JSON.stringify(updateFixturePayload),
     })
 
     const result = await getUpdatableSkills(ports, ['alpha', 'beta'])
@@ -697,12 +843,14 @@ describe('cache management', () => {
       return false
     })
     readFileSyncMock.mockReturnValue('{"contentHash":"old-hash","downloadedAt":100}')
-    getWithFallbackMock.mockResolvedValue({
+    // Shared mock serves both the registry fetch and the subsequent skill-file download call —
+    // discriminate by URL so the file content still matches SKILL_CONTENT_HASH.
+    getWithFallbackMock.mockImplementation(async (url: string) => ({
       ok: true,
       status: 200,
       json: async () => registryFixture,
-      text: async () => SKILL_CONTENT,
-    })
+      text: async () => (url.includes('skills-registry.json') ? JSON.stringify(registryFixture) : SKILL_CONTENT),
+    }))
 
     const path = await ensureSkillDownloaded(ports, 'accessibility')
 
@@ -754,7 +902,7 @@ describe('cache management', () => {
       ok: true,
       status: 200,
       json: async () => ({ ...registryFixture, skills: [] }),
-      text: async () => '',
+      text: async () => JSON.stringify({ ...registryFixture, skills: [] }),
     })
 
     const path = await ensureSkillDownloaded(ports, 'missing-skill')
@@ -771,7 +919,7 @@ describe('cache management', () => {
       ok: true,
       status: 200,
       json: async () => ({ ...registryFixture, skills: [] }),
-      text: async () => '',
+      text: async () => JSON.stringify({ ...registryFixture, skills: [] }),
     })
 
     const path = await ensureSkillDownloaded(ports, 'accessibility')
@@ -788,12 +936,14 @@ describe('cache management', () => {
         '/home/tester/.cache/agent-skills/skills/accessibility',
       ].includes(path),
     )
-    getWithFallbackMock.mockResolvedValue({
+    // Shared mock serves both the registry fetch and the subsequent skill-file download call —
+    // discriminate by URL so the file content still matches SKILL_CONTENT_HASH.
+    getWithFallbackMock.mockImplementation(async (url: string) => ({
       ok: true,
       status: 200,
       json: async () => registryFixture,
-      text: async () => SKILL_CONTENT,
-    })
+      text: async () => (url.includes('skills-registry.json') ? JSON.stringify(registryFixture) : SKILL_CONTENT),
+    }))
 
     const path = await forceDownloadSkill(ports, 'accessibility')
 

@@ -5,6 +5,7 @@ export * from './logger.port'
 export * from './package-resolver.port'
 export * from './paths.port'
 export * from './shell.port'
+export * from './signature-verifier.port'
 
 import type { EnvPort } from './env.port'
 import type { FileSystemPort } from './filesystem.port'
@@ -13,6 +14,7 @@ import type { LoggerPort } from './logger.port'
 import type { PackageResolverPort } from './package-resolver.port'
 import type { PathsPort } from './paths.port'
 import type { ShellPort } from './shell.port'
+import type { SignatureVerifierPort } from './signature-verifier.port'
 
 /**
  * Aggregates all infrastructure ports required by core services.
@@ -27,6 +29,7 @@ import type { ShellPort } from './shell.port'
  *   logger,
  *   packageResolver,
  *   paths,
+ *   signatureVerifier,
  * }
  * ```
  */
@@ -45,4 +48,6 @@ export interface CorePorts {
   packageResolver: PackageResolverPort
   /** Path resolver adapter used by core services. */
   paths: PathsPort
+  /** Signature verification adapter used by core services. */
+  signatureVerifier: SignatureVerifierPort
 }

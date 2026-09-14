@@ -28,6 +28,12 @@ export const DEFAULT_CATEGORY: CategoryInfo = {
 export const PACKAGE_NAME = '@tech-leads-club/agent-skills'
 /** Package name for the published skills catalog. */
 export const SKILLS_CATALOG_PACKAGE = '@tech-leads-club/skills-catalog'
+/**
+ * Canonical GitHub repository that produces trusted skills-catalog releases. Hardcoded to the
+ * upstream org regardless of which fork's CI runs the signing workflow, since the point of
+ * signature verification is to pin trust to the official release pipeline's identity.
+ */
+export const SKILLS_CATALOG_REPO = 'tech-leads-club/agent-skills'
 /** Project directory used to store agent-specific state. */
 export const AGENTS_DIR = '.agents'
 /** Canonical directory that stores local skill sources. */
