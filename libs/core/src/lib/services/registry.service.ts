@@ -9,11 +9,19 @@ import {
   REGISTRY_CACHE_TTL_MS,
   SKILL_META_FILE,
   SKILLS_CATALOG_PACKAGE,
+  SKILLS_CATALOG_REPO,
   SKILLS_SUBDIR,
 } from '../constants'
 import type { CorePorts } from '../ports'
 import type { CategoryInfo, DeprecatedEntry, SkillInfo, SkillMetadata, SkillsRegistry } from '../types'
 import { sanitizeName } from '../utils'
+
+/** Env var that switches signature verification from `warn` (default) to `enforce`. */
+const SIGNATURE_VERIFY_ENV = 'SKILLS_REGISTRY_VERIFY'
+/** Fulcio-issued certificates for GitHub Actions OIDC always carry this issuer. */
+const EXPECTED_CERT_ISSUER = 'https://token.actions.githubusercontent.com'
+/** Pins verification to the upstream repo's `release.yml` running on `main` — see {@link SKILLS_CATALOG_REPO}. */
+const EXPECTED_CERT_IDENTITY = `https://github.com/${SKILLS_CATALOG_REPO}/.github/workflows/release.yml@refs/heads/main`
 
 let cachedCdnRef: string | null = null
 
@@ -113,6 +121,7 @@ function buildUrls(cdnRef: string): {
   fallbackRegistry: string
   skillsBase: string
   fallbackSkillsBase: string
+  signature: string
 } {
   const cdnBase = `https://cdn.jsdelivr.net/npm/${SKILLS_CATALOG_PACKAGE}@${cdnRef}`
   const fallbackCdnBase = `https://unpkg.com/${SKILLS_CATALOG_PACKAGE}@${cdnRef}`
@@ -122,6 +131,49 @@ function buildUrls(cdnRef: string): {
     fallbackRegistry: `${fallbackCdnBase}/skills-registry.json`,
     skillsBase: `${cdnBase}/skills`,
     fallbackSkillsBase: `${fallbackCdnBase}/skills`,
+    // Published as a GitHub Release asset, not inside the npm package — see sign-registry.ts.
+    signature: `https://github.com/${SKILLS_CATALOG_REPO}/releases/download/skills-catalog-v${cdnRef}/skills-registry.json.sigstore.json`,
+  }
+}
+
+/**
+ * `'warn'` (default): a missing/invalid registry signature is logged but installation proceeds
+ * — the current, unchanged risk level. `'enforce'`: the registry is rejected instead. Opt into
+ * enforce via `SKILLS_REGISTRY_VERIFY=enforce` once a real release has produced a verifiable
+ * signature; flipping the default before that would let one signing bug block every install.
+ */
+function getSignatureVerificationMode(ports: CorePorts): 'warn' | 'enforce' {
+  return ports.env.getEnv(SIGNATURE_VERIFY_ENV) === 'enforce' ? 'enforce' : 'warn'
+}
+
+/**
+ * Verifies the Sigstore bundle published alongside a registry fetch against the exact bytes
+ * that were fetched, pinning the certificate identity to the upstream release workflow so a
+ * validly-Sigstore-signed-but-wrong-source bundle is rejected just like an invalid one.
+ *
+ * Never throws — every failure mode (fetch error, malformed bundle, wrong identity, bad
+ * signature) collapses into `{ verified: false, reason }` so callers can apply their own
+ * warn/enforce policy uniformly.
+ */
+async function verifyRegistrySignature(
+  ports: CorePorts,
+  registryBytes: Buffer,
+  signatureUrl: string,
+): Promise<{ verified: boolean; reason: string }> {
+  try {
+    const response = await ports.http.get(signatureUrl)
+    if (!response.ok) {
+      return { verified: false, reason: `Signature not found (HTTP ${response.status})` }
+    }
+
+    const bundle: unknown = await response.json()
+    await ports.signatureVerifier.verify(bundle, registryBytes, {
+      certificateIssuer: EXPECTED_CERT_ISSUER,
+      certificateIdentityURI: EXPECTED_CERT_IDENTITY,
+    })
+    return { verified: true, reason: 'Signature verified' }
+  } catch (error) {
+    return { verified: false, reason: error instanceof Error ? error.message : String(error) }
   }
 }
 
@@ -289,7 +341,21 @@ export async function fetchRegistry(ports: CorePorts, forceRefresh = false): Pro
   try {
     const urls = buildUrls(resolvedRef)
     const response = await ports.http.getWithFallback(urls.registry, urls.fallbackRegistry)
-    const registry = (await response.json()) as SkillsRegistry
+    const text = await response.text()
+    const registry = JSON.parse(text) as SkillsRegistry
+
+    const { verified, reason } = await verifyRegistrySignature(ports, Buffer.from(text, 'utf-8'), urls.signature)
+    if (!verified) {
+      const message = `Skills registry signature verification failed: ${reason}`
+      if (getSignatureVerificationMode(ports) === 'enforce') {
+        ports.logger.error(`${message} (installation blocked — ${SIGNATURE_VERIFY_ENV}=enforce)`)
+        return null
+      }
+      ports.logger.warn(
+        `${message} (proceeding — set ${SIGNATURE_VERIFY_ENV}=enforce to block unsigned/invalid registries)`,
+      )
+    }
+
     saveRegistryToCache(ports, registry)
     return registry
   } catch (error) {

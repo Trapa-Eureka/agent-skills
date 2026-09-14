@@ -399,6 +399,25 @@ jobs:
           NPM_CONFIG_PROVENANCE: true
           NX_NO_CLOUD: true
 
+      # Signs the exact skills-registry.json bytes that were just published, using GitHub Actions'
+      # ambient OIDC (id-token: write is already granted at workflow level — see top of this
+      # file) for Sigstore keyless signing. The bundle is attached to the skills-catalog GitHub
+      # Release nx release already created, not published inside the npm package itself — see
+      # docs/roadmap/IMPROVEMENT_ROADMAP.md (TASK 3) and registry.service.ts's buildUrls().
+      - name: Sign Skills Registry
+        if: |
+          steps.check-changes.outputs.has_changes == 'true' &&
+          contains(steps.check-changes.outputs.groups_to_release, 'skills-catalog')
+        run: |
+          npx tsx packages/skills-catalog/scripts/sign-registry.ts packages/skills-catalog/dist/skills-registry.json
+          SKILLS_CATALOG_VERSION=$(node -p "require('./packages/skills-catalog/package.json').version")
+          gh release upload "skills-catalog-v${SKILLS_CATALOG_VERSION}" \
+            packages/skills-catalog/dist/skills-registry.json.sigstore.json \
+            --repo "${{ github.repository }}" \
+            --clobber
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+
       - name: Skip Release (No Changes)
         if: steps.check-changes.outputs.has_changes != 'true'
         run: echo "⏭️ No releasable changes detected in release-group projects. Skipping release."

@@ -7,6 +7,7 @@ import { NodeLoggerAdapter } from './node-logger.adapter'
 import { NodePackageResolverAdapter } from './node-package-resolver.adapter'
 import { NodePathsAdapter } from './node-paths.adapter'
 import { NodeShellAdapter } from './node-shell.adapter'
+import { SigstoreSignatureVerifierAdapter } from './sigstore-signature-verifier.adapter'
 
 export * from './node-env.adapter'
 export * from './node-filesystem.adapter'
@@ -15,6 +16,7 @@ export * from './node-logger.adapter'
 export * from './node-package-resolver.adapter'
 export * from './node-paths.adapter'
 export * from './node-shell.adapter'
+export * from './sigstore-signature-verifier.adapter'
 
 /**
  * Creates the default Node.js adapter set for all core infrastructure ports.
@@ -39,5 +41,6 @@ export function createNodeAdapters(): CorePorts {
     logger: new NodeLoggerAdapter(),
     packageResolver: new NodePackageResolverAdapter(),
     paths: new NodePathsAdapter(),
+    signatureVerifier: new SigstoreSignatureVerifierAdapter(),
   }
 }
