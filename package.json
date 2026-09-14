@@ -107,7 +107,10 @@
     "@module-federation/runtime-core": "2.9.0",
     "@module-federation/runtime-tools": "2.9.0",
     "@module-federation/sdk": "2.9.0",
-    "@module-federation/webpack-bundler-runtime": "2.9.0"
+    "@module-federation/webpack-bundler-runtime": "2.9.0",
+    "@emnapi/core": "1.11.2",
+    "@emnapi/runtime": "1.11.2",
+    "@emnapi/wasi-threads": "1.2.3"
   },
   "nx": {
     "includedScripts": []
