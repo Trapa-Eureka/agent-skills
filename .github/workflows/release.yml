@@ -60,6 +60,12 @@ jobs:
       - name: Validate Skills Structure
         uses: ./.github/actions/validate-skills
 
+      # Replays each skill's recorded evals/ transcripts and fails if any verdict regresses —
+      # no secrets or live agent CLI needed, so this runs for every PR including forks. See
+      # docs/roadmap/IMPROVEMENT_ROADMAP.md (TASK 4) and libs/conformance/README.md.
+      - name: Run Skill Behavioral Evals
+        run: npx nx run conformance:run-catalog-evals || NX_NO_CLOUD=true npx nx run conformance:run-catalog-evals
+
       - name: Security Scan
         id: security-scan
         if: github.event.pull_request.head.repo.full_name == github.repository

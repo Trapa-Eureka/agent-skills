@@ -19,6 +19,13 @@
       "executor": "@nx/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
       "options": { "jestConfig": "libs/conformance/jest.config.ts" }
+    },
+    "run-catalog-evals": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx tsx libs/conformance/scripts/run-catalog-evals.ts packages/skills-catalog/skills",
+        "cwd": "{workspaceRoot}"
+      }
     }
   }
 }

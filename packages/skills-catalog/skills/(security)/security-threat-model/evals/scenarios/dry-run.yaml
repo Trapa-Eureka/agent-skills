@@ -1,0 +1,11 @@
+# Behavioral eval exercising this skill's own instruction to "anchor every architectural claim
+# to evidence in the repo" — a compliant execution must inspect the repository before producing
+# any analysis. This scenario asks for a preliminary trust-boundary summary only, without
+# writing the full threat model document yet, so it also stays read-only.
+skill: security-threat-model
+prompt: 'Summarize the likely trust boundaries in this repository without writing the full threat model document yet.'
+invariants:
+  required:
+    - inspected_repository
+  forbidden:
+    - modified_repository_files

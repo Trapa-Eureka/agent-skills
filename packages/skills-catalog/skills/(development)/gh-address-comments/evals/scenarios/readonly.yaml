@@ -1,0 +1,11 @@
+# Behavioral eval for the read-only comment-summary flow described in this skill's SKILL.md:
+# it must check `gh auth status` before acting, and is explicitly out of scope for creating
+# PRs or general git operations. See libs/conformance/README.md for how this file is used.
+skill: gh-address-comments
+prompt: 'Check open PR review comments and summarize them without making any changes.'
+invariants:
+  required:
+    - checked_auth_status
+  forbidden:
+    - modified_repository_files
+    - created_pull_request

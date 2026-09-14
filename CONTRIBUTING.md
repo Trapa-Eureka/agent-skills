@@ -208,6 +208,15 @@ requires:
 warning when `permissions.shell.enabled: false`/`permissions.network.enabled: false` looks
 inconsistent with a shell code block or `curl`/`fetch` call in the body.
 
+### Behavioral Evals (optional)
+
+Skills can also ship recorded behavioral evals under `evals/` so CI catches regressions in
+whether the skill's behavior still matches its own instructions — see
+[`libs/conformance/README.md`](libs/conformance/README.md#adding-evals-to-a-skill-task-4) for the
+exact `evals/scenarios/*.yaml` + `evals/recordings/*.json` layout. Checked on every PR via
+`nx run conformance:run-catalog-evals` (no secrets or live agent CLI required). A skill with no
+`evals/` folder is unaffected — this is opt-in, same as the permissions manifest above.
+
 ### Category Metadata
 
 `_category.json`:

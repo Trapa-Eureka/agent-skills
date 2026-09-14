@@ -1,0 +1,9 @@
+{
+  "agentId": "compliant-agent",
+  "rawOutput": "Checked gh auth status, fetched PR comments, and summarized them without modifying anything.",
+  "toolCalls": [
+    { "kind": "bash", "detail": "gh auth status" },
+    { "kind": "bash", "detail": "gh pr view --json comments" },
+    { "kind": "read_file", "detail": "scripts/fetch_comments.py" }
+  ]
+}

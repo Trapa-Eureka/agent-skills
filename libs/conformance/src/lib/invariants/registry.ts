@@ -1,6 +1,6 @@
 import type { InvariantChecker } from '../types'
 
-import { checkedAuthStatus, createdPullRequest, modifiedRepositoryFiles } from './checks'
+import { checkedAuthStatus, createdPullRequest, inspectedRepository, modifiedRepositoryFiles } from './checks'
 
 /**
  * All invariant ids the harness knows how to check, keyed by the id used in scenario YAML files.
@@ -10,6 +10,7 @@ const INVARIANT_CHECKERS: Record<string, InvariantChecker> = {
   checked_auth_status: checkedAuthStatus,
   modified_repository_files: modifiedRepositoryFiles,
   created_pull_request: createdPullRequest,
+  inspected_repository: inspectedRepository,
 }
 
 /**

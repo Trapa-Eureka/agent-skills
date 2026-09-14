@@ -17,7 +17,12 @@ describe('getInvariantChecker', () => {
 describe('listInvariantIds', () => {
   it('includes the ids used by the pilot scenario', () => {
     expect(listInvariantIds()).toEqual(
-      expect.arrayContaining(['checked_auth_status', 'modified_repository_files', 'created_pull_request']),
+      expect.arrayContaining([
+        'checked_auth_status',
+        'modified_repository_files',
+        'created_pull_request',
+        'inspected_repository',
+      ]),
     )
   })
 })
