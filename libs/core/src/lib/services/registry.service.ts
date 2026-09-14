@@ -16,6 +16,8 @@ import type { CorePorts } from '../ports'
 import type { CategoryInfo, DeprecatedEntry, SkillInfo, SkillMetadata, SkillsRegistry } from '../types'
 import { sanitizeName } from '../utils'
 
+import { MAX_KNOWN_REGISTRY_SCHEMA_VERSION, migrateRegistrySchema } from './registry-schema.service'
+
 /** Env var that switches signature verification from `warn` (default) to `enforce`. */
 const SIGNATURE_VERIFY_ENV = 'SKILLS_REGISTRY_VERIFY'
 /** Fulcio-issued certificates for GitHub Actions OIDC always carry this issuer. */
@@ -356,8 +358,16 @@ export async function fetchRegistry(ports: CorePorts, forceRefresh = false): Pro
       )
     }
 
-    saveRegistryToCache(ports, registry)
-    return registry
+    const { registry: migratedRegistry, schemaVersion, isNewerThanKnown } = migrateRegistrySchema(registry)
+    if (isNewerThanKnown) {
+      ports.logger.warn(
+        `Skills registry schema v${schemaVersion} is newer than this CLI supports (up to v${MAX_KNOWN_REGISTRY_SCHEMA_VERSION}) — ` +
+          'some new fields may be ignored until you upgrade @tech-leads-club/agent-skills.',
+      )
+    }
+
+    saveRegistryToCache(ports, migratedRegistry)
+    return migratedRegistry
   } catch (error) {
     const cached = tryReadCachedRegistry(ports)
     if (cached) return cached.registry

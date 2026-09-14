@@ -236,6 +236,23 @@ picks it up automatically — see
 [`libs/conformance/README.md`](libs/conformance/README.md#compatibility-matrix-task-5) for exactly
 what "tested" means and its honesty caveat. No separate authoring step is needed.
 
+### Registry Schema Versioning
+
+`skills-registry.json` carries a `schemaVersion` (currently `1`, `REGISTRY_SCHEMA_VERSION` in
+`packages/skills-catalog/src/utils.ts`). The CLI checks it in `fetchRegistry`
+(`libs/core/src/lib/services/registry-schema.service.ts`): an older or matching version is fine,
+and a newer version than the CLI build knows about (`MAX_KNOWN_REGISTRY_SCHEMA_VERSION`) logs a
+warning and upgrade suggestion but still proceeds — every schema change shipped so far has only
+ever added optional fields, which a CLI built before they existed already ignores safely.
+
+**When you add or change a registry field**: if it's additive (a new optional field, like
+`permissions`/`requires`/`compatibility` before it), you don't need to bump `schemaVersion` at
+all — those all happened at v1. Bump `schemaVersion` (both constants above, kept in sync) only
+when the change isn't purely additive — a field is removed, renamed, or an existing field's shape
+changes — and add a migration step to `registry-schema.service.ts`'s step map so CLIs that fetch
+the new registry while still expecting the old shape can transform it, mirroring
+`migrateLockFile` in `lockfile.service.ts` for the local lockfile's own `version`.
+
 ### Category Metadata
 
 `_category.json`:
