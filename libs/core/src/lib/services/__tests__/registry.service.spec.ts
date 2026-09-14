@@ -445,6 +445,59 @@ describe('fetchRegistry signature verification', () => {
   })
 })
 
+describe('fetchRegistry schema versioning', () => {
+  // Isolates the schema-version warning from the default (unsigned-fixture) signature warning
+  // every other describe block in this file relies on — see 'fetchRegistry signature
+  // verification' above for what a verified signature mock looks like.
+  const mockVerifiedFetch = (ports: TestPorts, payload: SkillsRegistry) => {
+    ports.signatureVerifyMock.mockResolvedValue(undefined)
+    ports.getWithFallbackMock.mockResolvedValue({
+      ok: true,
+      status: 200,
+      json: async () => payload,
+      text: async () => JSON.stringify(payload),
+    })
+    ports.getMock.mockResolvedValue({
+      ok: true,
+      status: 200,
+      json: async () => ({ mediaType: 'application/vnd.dev.sigstore.bundle+json;version=0.3' }),
+      text: async () => '{}',
+    })
+  }
+
+  it('does not warn for a known schemaVersion', async () => {
+    const testPorts = createPorts()
+    mockVerifiedFetch(testPorts, { ...registryFixture, schemaVersion: 1 })
+
+    const result = await fetchRegistry(testPorts.ports)
+
+    expect(result).toEqual({ ...registryFixture, schemaVersion: 1 })
+    expect(testPorts.loggerWarnMock).not.toHaveBeenCalled()
+  })
+
+  it('does not warn when schemaVersion is absent (predates the field)', async () => {
+    const testPorts = createPorts()
+    mockVerifiedFetch(testPorts, registryFixture)
+
+    const result = await fetchRegistry(testPorts.ports)
+
+    expect(result).toEqual(registryFixture)
+    expect(testPorts.loggerWarnMock).not.toHaveBeenCalled()
+  })
+
+  it('warns, but still returns the registry, when schemaVersion is newer than this CLI knows', async () => {
+    const testPorts = createPorts()
+    const newerRegistry = { ...registryFixture, schemaVersion: 999 }
+    mockVerifiedFetch(testPorts, newerRegistry)
+
+    const result = await fetchRegistry(testPorts.ports)
+
+    expect(result).toEqual(newerRegistry)
+    expect(testPorts.loggerWarnMock).toHaveBeenCalledTimes(1)
+    expect(testPorts.loggerWarnMock.mock.calls[0][0]).toContain('schema v999')
+  })
+})
+
 describe('downloadSkill', () => {
   it('downloads a skill and writes its files to the local cache', async () => {
     const { ports, getWithFallbackMock, writeFileSyncMock } = createPorts()

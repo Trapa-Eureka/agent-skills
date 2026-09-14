@@ -8,7 +8,12 @@ export const IGNORED_FILES = ['.DS_Store', '.gitkeep', 'Thumbs.db', '.gitignore'
 export const CATEGORY_FOLDER_PATTERN = /^\(([a-z][a-z0-9-]*)\)$/
 export const CATEGORY_METADATA_FILE = '_category.json'
 export const SKILL_NAME_SLUG_PATTERN = /^[a-z][a-z0-9-]*$/
-/** Current `skills-registry.json` payload schema version, written by {@link generateRegistry}. */
+/**
+ * Current `skills-registry.json` payload schema version, written by {@link generateRegistry}.
+ * Bump this — and `MAX_KNOWN_REGISTRY_SCHEMA_VERSION` in
+ * `libs/core/src/lib/services/registry-schema.service.ts`, adding a migration step there if the
+ * change isn't purely additive — whenever the registry shape changes. See CONTRIBUTING.md.
+ */
 export const REGISTRY_SCHEMA_VERSION = 1
 
 export interface SkillMetadata {
