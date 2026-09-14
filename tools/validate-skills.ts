@@ -16,6 +16,8 @@ interface ValidationResult {
   failed: number
   warnings: number
   summary?: string
+  /** Names from a well-formed `requires.skills` list, used by {@link validateSkillDependencyGraph}. */
+  requiresSkills?: string[]
 }
 
 function validateSkill(skillPath: string): ValidationResult {
@@ -280,12 +282,32 @@ function validateSkill(skillPath: string): ValidationResult {
     if (!isPlainObject(requires)) {
       addCheck('requires_shape_valid', false, "'requires' must be a mapping, e.g. requires: { mcp: [context7] }")
     } else {
+      const isOptionalStringArray = (value: unknown): boolean =>
+        value === undefined || (Array.isArray(value) && value.every((entry) => typeof entry === 'string'))
+
       const mcp = requires.mcp
-      const mcpValid = mcp === undefined || (Array.isArray(mcp) && mcp.every((entry) => typeof entry === 'string'))
+      const mcpValid = isOptionalStringArray(mcp)
       addCheck(
         'requires_mcp_shape',
         mcpValid,
         mcpValid ? 'requires.mcp is well-formed' : "'requires.mcp' must be an array of strings",
+      )
+
+      const skillsReq = requires.skills
+      const skillsValid = isOptionalStringArray(skillsReq)
+      addCheck(
+        'requires_skills_shape',
+        skillsValid,
+        skillsValid ? 'requires.skills is well-formed' : "'requires.skills' must be an array of strings",
+      )
+      if (skillsValid && Array.isArray(skillsReq)) results.requiresSkills = skillsReq as string[]
+
+      const tools = requires.tools
+      const toolsValid = isOptionalStringArray(tools)
+      addCheck(
+        'requires_tools_shape',
+        toolsValid,
+        toolsValid ? 'requires.tools is well-formed' : "'requires.tools' must be an array of strings",
       )
     }
   }
@@ -360,6 +382,52 @@ function printReport(results: ValidationResult) {
   console.log(`${'─'.repeat(60)}\n`)
 }
 
+/**
+ * Cross-skill check that `validateSkill` can't do alone — it only sees one skill directory at a
+ * time, but `requires.skills` references need the full catalog: an unknown name (typo, rename,
+ * removed skill) and a circular chain (a legitimate skill graph should never have one) are both
+ * authoring bugs that should fail CI before publish, not surface later as a broken install.
+ */
+function validateSkillDependencyGraph(allResults: ValidationResult[]): boolean {
+  const byName = new Map(allResults.map((r) => [basename(r.path), r]))
+  let ok = true
+
+  for (const result of allResults) {
+    const skillName = basename(result.path)
+    for (const dependencyName of result.requiresSkills ?? []) {
+      if (!byName.has(dependencyName)) {
+        console.log(`  ❌ ${skillName}: requires.skills references unknown skill '${dependencyName}'`)
+        ok = false
+      }
+    }
+  }
+
+  const visiting = new Set<string>()
+  const done = new Set<string>()
+  const path: string[] = []
+
+  function visit(name: string): void {
+    if (done.has(name) || !byName.has(name)) return
+    if (visiting.has(name)) {
+      const cycleStart = path.indexOf(name)
+      console.log(`  ❌ Circular skill dependency: ${[...path.slice(cycleStart), name].join(' → ')}`)
+      ok = false
+      return
+    }
+
+    visiting.add(name)
+    path.push(name)
+    for (const dependencyName of byName.get(name)?.requiresSkills ?? []) visit(dependencyName)
+    path.pop()
+    visiting.delete(name)
+    done.add(name)
+  }
+
+  for (const name of byName.keys()) visit(name)
+
+  return ok
+}
+
 function validateBatch(skillsRoot: string): boolean {
   const allResults: ValidationResult[] = []
 
@@ -405,7 +473,13 @@ function validateBatch(skillsRoot: string): boolean {
     }
   }
 
-  return totalFailed === 0
+  console.log(`\n${'='.repeat(60)}`)
+  console.log(`  Dependency Graph Check (requires.skills)`)
+  console.log(`${'='.repeat(60)}\n`)
+  const graphOk = validateSkillDependencyGraph(allResults)
+  console.log(graphOk ? '  ✅ No unknown references or cycles found\n' : '')
+
+  return totalFailed === 0 && graphOk
 }
 
 const args = process.argv.slice(2)

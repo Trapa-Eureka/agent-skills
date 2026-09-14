@@ -162,10 +162,16 @@ export function parseSkillPermissions(content: string): {
 
   const rawRequires = fm.requires
   if (rawRequires && typeof rawRequires === 'object') {
-    const mcp = (rawRequires as Record<string, unknown>).mcp
-    if (Array.isArray(mcp) && mcp.every((entry) => typeof entry === 'string')) {
-      result.requires = { mcp }
-    }
+    const r = rawRequires as Record<string, unknown>
+    const isStringArray = (value: unknown): value is string[] =>
+      Array.isArray(value) && value.every((entry) => typeof entry === 'string')
+
+    const requires: SkillRequirements = {}
+    if (isStringArray(r.mcp)) requires.mcp = r.mcp
+    if (isStringArray(r.skills)) requires.skills = r.skills
+    if (isStringArray(r.tools)) requires.tools = r.tools
+
+    if (Object.keys(requires).length > 0) result.requires = requires
   }
 
   return result

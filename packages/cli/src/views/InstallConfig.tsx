@@ -7,6 +7,13 @@ import { SelectPrompt } from '../components/SelectPrompt'
 import { colors, symbols } from '../theme'
 import type { SkillInfo } from '../types'
 
+interface DependencyNotice {
+  /** Skill names pulled in automatically via another selected skill's `requires.skills`. */
+  autoIncluded: string[]
+  /** Circular `requires.skills` chains found while resolving — see `resolveSkillDependencies`. */
+  cycles: string[][]
+}
+
 interface InstallConfigProps {
   onConfirm: (config: { method: 'copy' | 'symlink'; global: boolean }) => void
   onBack: () => void
@@ -14,6 +21,8 @@ interface InstallConfigProps {
   initialGlobal?: boolean
   /** Skills about to be installed, used to render a permission summary before confirming. */
   skills?: SkillInfo[]
+  /** Result of resolving `requires.skills` for the selected skills, if any were pulled in. */
+  dependencyNotice?: DependencyNotice
 }
 
 export function InstallConfig({
@@ -22,6 +31,7 @@ export function InstallConfig({
   initialMethod = 'copy',
   initialGlobal = false,
   skills = [],
+  dependencyNotice,
 }: InstallConfigProps) {
   const [step, setStep] = useState<'method' | 'scope' | 'confirm'>('method')
   const [method, setMethod] = useState<'copy' | 'symlink'>(initialMethod)
@@ -80,9 +90,32 @@ export function InstallConfig({
       method={method}
       isGlobal={isGlobal}
       skills={skills}
+      dependencyNotice={dependencyNotice}
       onConfirm={() => onConfirm({ method, global: isGlobal })}
       onBack={() => setStep('scope')}
     />
+  )
+}
+
+function DependencyNoticeView({ dependencyNotice }: { dependencyNotice?: DependencyNotice }) {
+  if (!dependencyNotice) return null
+  const { autoIncluded, cycles } = dependencyNotice
+  if (autoIncluded.length === 0 && cycles.length === 0) return null
+
+  return (
+    <Box flexDirection="column" marginTop={1}>
+      {autoIncluded.length > 0 && (
+        <Text color={colors.textDim}>
+          Dependencies {symbols.dot} +{autoIncluded.length} skill{autoIncluded.length !== 1 ? 's' : ''} added
+          automatically: {autoIncluded.join(', ')}
+        </Text>
+      )}
+      {cycles.map((cycle) => (
+        <Text key={cycle.join('>')} color={colors.warning}>
+          {symbols.cross} Circular dependency ignored: {cycle.join(' → ')}
+        </Text>
+      ))}
+    </Box>
   )
 }
 
@@ -139,12 +172,14 @@ function InstallSummary({
   method,
   isGlobal,
   skills,
+  dependencyNotice,
   onConfirm,
   onBack,
 }: {
   method: string
   isGlobal: boolean
   skills: SkillInfo[]
+  dependencyNotice?: DependencyNotice
   onConfirm: () => void
   onBack: () => void
 }) {
@@ -191,6 +226,7 @@ function InstallSummary({
         </Box>
 
         <PermissionsPreview skills={skills} />
+        <DependencyNoticeView dependencyNotice={dependencyNotice} />
       </Box>
 
       <Box marginTop={1} borderStyle="round" borderColor={colors.border} paddingX={1}>
