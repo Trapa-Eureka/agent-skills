@@ -34,3 +34,15 @@ export const createdPullRequest: InvariantChecker = (execution) => {
     evidence: match ? `Found in commandsRun: "${match}"` : undefined,
   }
 }
+
+/**
+ * Observed when the execution read at least one file — used to enforce that an agent inspected
+ * the repository (or other input) before acting, rather than responding from assumption alone.
+ */
+export const inspectedRepository: InvariantChecker = (execution) => {
+  const observed = execution.filesRead.length > 0
+  return {
+    observed,
+    evidence: observed ? `Read files: ${execution.filesRead.join(', ')}` : undefined,
+  }
+}

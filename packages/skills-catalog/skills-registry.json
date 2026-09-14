@@ -874,11 +874,14 @@
       "files": [
         "LICENSE.txt",
         "SKILL.md",
+        "evals/recordings/readonly.compliant-agent.pass.json",
+        "evals/recordings/readonly.violating-agent.fail.json",
+        "evals/scenarios/readonly.yaml",
         "scripts/fetch_comments.py"
       ],
       "author": "github.com/openai/skills",
       "version": "1.0.0",
-      "contentHash": "a1808fb136b7118a7bdac65415e9a40a7982953f8b3339c97087fc0807865d88"
+      "contentHash": "282d3825f43cc72f41d00547332be2b4c84818f167de9792df7858518c5beef0"
     },
     {
       "name": "gh-fix-ci",
@@ -1516,12 +1519,15 @@
       "files": [
         "LICENSE.txt",
         "SKILL.md",
+        "evals/recordings/dry-run.compliant-agent.pass.json",
+        "evals/recordings/dry-run.violating-agent.fail.json",
+        "evals/scenarios/dry-run.yaml",
         "references/prompt-template.md",
         "references/security-controls-and-assets.md"
       ],
       "author": "github.com/openai/skills",
       "version": "1.0.0",
-      "contentHash": "9f4cf3c7971c6d84a4657c2c0c395a4c7febbac5a2361950922fc150fcef9599"
+      "contentHash": "38384ad3e27d0479300a252f9af64527a10ba2b8349946116e0411aa18a49cfa"
     },
     {
       "name": "sentry",

@@ -1,6 +1,8 @@
 # @tech-leads-club/conformance
 
-Cross-agent behavioral conformance harness (TASK 1 of `docs/roadmap/IMPROVEMENT_ROADMAP.md`).
+Cross-agent behavioral conformance harness (TASK 1 of `docs/roadmap/IMPROVEMENT_ROADMAP.md`),
+extended by TASK 4 (Behavioral Evaluation Framework) into a catalog-wide, CI-checked regression
+suite.
 
 Runs a skill scenario through multiple agent CLI adapters and checks whether each execution
 satisfies the same declared behavioral invariants — not whether the agents produced identical
@@ -45,8 +47,36 @@ binary** — no CLI or API key is available in this environment/CI, so:
 2. Register it under a stable id in `src/lib/invariants/registry.ts`.
 3. Reference that id from a scenario's `required`/`forbidden` list.
 
-## Adding a new scenario
+## Adding a new scenario (framework self-tests)
 
 Add a YAML file under `fixtures/scenarios/` (see `gh-address-comments-readonly.yaml`) with
 `skill`, `prompt`, and `invariants.{required,forbidden}`, using only invariant ids already
-registered.
+registered. These fixtures are for this package's own tests only — for real skills, see below.
+
+## Adding evals to a skill (TASK 4)
+
+Skills can ship their own behavioral evals under `evals/` in their own folder, checked by CI on
+every PR (`nx run conformance:run-catalog-evals`, no secrets or live agent CLI required):
+
+```
+packages/skills-catalog/skills/(category)/skill-name/
+  evals/
+    scenarios/
+      <name>.yaml                                   # same Scenario format as above
+    recordings/
+      <name>.<recording-id>.pass.json                # a RawAgentExecution that must PASS
+      <name>.<recording-id>.fail.json                # one that must FAIL
+```
+
+- `<name>` in a recording's filename must match its scenario file's basename (without extension)
+  — that's how `discoverSkillEvals()` pairs them up.
+- `<recording-id>` is just a label (becomes the mock adapter's `id` in reports) — pick something
+  descriptive, e.g. `compliant-agent`/`violating-agent`.
+- The trailing `pass`/`fail` is the verdict CI expects when that recording is replayed. A
+  mismatch — the checker logic or the scenario changed and this recording's actual verdict no
+  longer matches — fails the CI step with a diagnostic (which invariant flipped and why).
+- A scenario with no recordings yet is not a CI failure, just a warning — recordings are opt-in
+  per skill, same as the `permissions` manifest (TASK 2).
+- There is no live-agent mode in CI — recordings are how a maintainer captures what agent
+  behavior currently looks like (by hand, or from a real `ClaudeCodeCliAdapter`/`CodexCliAdapter`
+  run) so future changes to the skill or the checkers can be caught mechanically.

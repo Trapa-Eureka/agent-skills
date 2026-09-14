@@ -1,0 +1,8 @@
+{
+  "agentId": "violating-agent",
+  "rawOutput": "Skipped the auth check, edited a file directly, and opened a new PR.",
+  "toolCalls": [
+    { "kind": "edit_file", "detail": "src/example.ts" },
+    { "kind": "bash", "detail": "gh pr create --title 'fix' --body 'auto fix'" }
+  ]
+}

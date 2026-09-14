@@ -1,7 +1,7 @@
 import { describe, expect, it } from '@jest/globals'
 
 import type { NormalizedExecution } from '../../types'
-import { checkedAuthStatus, createdPullRequest, modifiedRepositoryFiles } from '../checks'
+import { checkedAuthStatus, createdPullRequest, inspectedRepository, modifiedRepositoryFiles } from '../checks'
 
 const baseExecution: NormalizedExecution = {
   agentId: 'test-agent',
@@ -43,5 +43,17 @@ describe('createdPullRequest', () => {
 
   it('does not observe an unrelated gh command', () => {
     expect(createdPullRequest({ ...baseExecution, commandsRun: ['gh pr view'] }).observed).toBe(false)
+  })
+})
+
+describe('inspectedRepository', () => {
+  it('observes when any file was read', () => {
+    const result = inspectedRepository({ ...baseExecution, filesRead: ['SKILL.md'] })
+    expect(result.observed).toBe(true)
+    expect(result.evidence).toContain('SKILL.md')
+  })
+
+  it('does not observe when no files were read', () => {
+    expect(inspectedRepository(baseExecution).observed).toBe(false)
   })
 })

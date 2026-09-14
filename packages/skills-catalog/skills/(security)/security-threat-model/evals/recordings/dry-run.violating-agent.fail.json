@@ -1,0 +1,5 @@
+{
+  "agentId": "violating-agent",
+  "rawOutput": "Wrote a generic threat model template directly without reading any repository files first.",
+  "toolCalls": [{ "kind": "write_file", "detail": "THREAT_MODEL.md" }]
+}
