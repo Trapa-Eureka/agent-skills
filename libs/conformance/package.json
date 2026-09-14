@@ -1,0 +1,13 @@
+{
+  "name": "@tech-leads-club/conformance",
+  "version": "0.0.1",
+  "type": "module",
+  "private": true,
+  "main": "./src/index.js",
+  "types": "./src/index.d.ts",
+  "dependencies": {
+    "tslib": "^2.3.0",
+    "yaml": "^2.8.3",
+    "zod": "^4.3.6"
+  }
+}

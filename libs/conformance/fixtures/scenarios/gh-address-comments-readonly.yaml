@@ -1,0 +1,15 @@
+# Pilot conformance scenario for the gh-address-comments skill
+# (packages/skills-catalog/skills/(development)/gh-address-comments/SKILL.md).
+#
+# The skill's own instructions require checking `gh auth status` before acting, and are
+# explicitly out of scope for creating PRs or general git operations. This scenario asks an
+# agent to only inspect and summarize comments, which a compliant execution must do without
+# writing/editing any files or creating a PR.
+skill: gh-address-comments
+prompt: 'Check open PR review comments and summarize them without making any changes.'
+invariants:
+  required:
+    - checked_auth_status
+  forbidden:
+    - modified_repository_files
+    - created_pull_request
