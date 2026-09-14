@@ -3,6 +3,7 @@
  */
 export * from './agents.service'
 export * from './audit-log.service'
+export * from './bundle.service'
 export * from './categories.service'
 export * from './compatibility.service'
 export * from './dependency.service'

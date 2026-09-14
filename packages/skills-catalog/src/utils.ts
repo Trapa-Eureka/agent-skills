@@ -1,4 +1,5 @@
 import type { DeprecatedEntry, SkillCompatibility, SkillPermissions, SkillRequirements } from '@tech-leads-club/core'
+import { createDeterministicTarball, hashBundle } from '@tech-leads-club/core'
 import { createHash } from 'node:crypto'
 import { existsSync, readdirSync, readFileSync } from 'node:fs'
 import { join } from 'node:path'
@@ -25,6 +26,7 @@ export interface SkillMetadata {
   author?: string
   version?: string
   contentHash: string
+  bundleHash: string
   permissions?: SkillPermissions
   requires?: SkillRequirements
   compatibility?: SkillCompatibility
@@ -201,6 +203,21 @@ export function getFilesInDirectory(dir: string): string[] {
 
   walk(dir)
   return files
+}
+
+/**
+ * SHA-256 of this skill's deterministic tar bundle — see `bundleHash` on `SkillMetadata`
+ * (`@tech-leads-club/core`) and `createDeterministicTarball` for what "deterministic" means
+ * here. Uses the exact same builder the CLI's `agent-skills package` command does, so a locally
+ * rebuilt bundle's hash can be checked against what this generator publishes (TASK 9).
+ */
+export function computeSkillBundleHash(skillDir: string, files: string[]): string {
+  const bundleFiles = [...files].sort().flatMap((file) => {
+    const filePath = join(skillDir, file)
+    return existsSync(filePath) ? [{ path: file, content: readFileSync(filePath) }] : []
+  })
+
+  return hashBundle(createDeterministicTarball(bundleFiles))
 }
 
 export function computeSkillHash(skillDir: string, files: string[]): string {

@@ -432,6 +432,14 @@ export interface SkillMetadata {
   version?: string
   /** Optional content hash used for cache validation. */
   contentHash?: string
+  /**
+   * SHA-256 of this skill's deterministic tar bundle (`createDeterministicTarball` in
+   * `libs/core/src/lib/services/bundle.service.ts`) — rebuilding the bundle from the same
+   * `files` always reproduces this exact hash, independent of when or where it's built. Unlike
+   * `contentHash` (which only proves file content didn't change), this lets anyone verify the
+   * *distributable artifact* itself is reproducible, complementing TASK 3's registry signing.
+   */
+  bundleHash?: string
   /** Optional declared capability manifest, when the skill's frontmatter declares one. */
   permissions?: SkillPermissions
   /** Optional declared external dependencies, when the skill's frontmatter declares one. */
