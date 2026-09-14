@@ -1,6 +1,18 @@
 ---
 name: nx-ci-monitor
 description: Monitor Nx Cloud CI pipeline status and handle self-healing fixes automatically. Use when user says "watch CI", "monitor pipeline", "check CI status", "fix CI failures", or "self-heal CI". Requires Nx Cloud connection. Do NOT use for local task execution (use nx-run-tasks) or general CI debugging outside Nx Cloud.
+permissions:
+  filesystem:
+    read: true
+    write: true
+  shell:
+    enabled: true
+  git:
+    read: true
+    write: true
+requires:
+  mcp:
+    - nx-cloud
 ---
 
 # CI Monitor Command

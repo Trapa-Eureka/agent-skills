@@ -4,6 +4,20 @@ description: Use the Figma MCP server to fetch design context, screenshots, vari
 metadata:
   author: github.com/openai/skills
   version: '1.0.0'
+permissions:
+  filesystem:
+    read: true
+    write: true
+  shell:
+    enabled: false
+  network:
+    enabled: false
+  git:
+    read: false
+    write: false
+requires:
+  mcp:
+    - figma
 ---
 
 # Figma MCP

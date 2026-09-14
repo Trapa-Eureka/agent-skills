@@ -1,12 +1,15 @@
-import type { DeprecatedEntry } from '@tech-leads-club/core'
+import type { DeprecatedEntry, SkillPermissions, SkillRequirements } from '@tech-leads-club/core'
 import { createHash } from 'node:crypto'
 import { existsSync, readdirSync, readFileSync } from 'node:fs'
 import { join } from 'node:path'
+import YAML from 'yaml'
 
 export const IGNORED_FILES = ['.DS_Store', '.gitkeep', 'Thumbs.db', '.gitignore']
 export const CATEGORY_FOLDER_PATTERN = /^\(([a-z][a-z0-9-]*)\)$/
 export const CATEGORY_METADATA_FILE = '_category.json'
 export const SKILL_NAME_SLUG_PATTERN = /^[a-z][a-z0-9-]*$/
+/** Current `skills-registry.json` payload schema version, written by {@link generateRegistry}. */
+export const REGISTRY_SCHEMA_VERSION = 1
 
 export interface SkillMetadata {
   name: string
@@ -17,6 +20,8 @@ export interface SkillMetadata {
   author?: string
   version?: string
   contentHash: string
+  permissions?: SkillPermissions
+  requires?: SkillRequirements
 }
 
 export interface CategoryMetadata {
@@ -26,6 +31,7 @@ export interface CategoryMetadata {
 
 export interface SkillsRegistry {
   version: string
+  schemaVersion?: number
   categories: Record<string, CategoryMetadata>
   skills: SkillMetadata[]
   deprecated?: DeprecatedEntry[]
@@ -101,6 +107,67 @@ export function parseSkillFrontmatter(content: string): {
     author: authorMatch?.[1]?.trim(),
     version: versionMatch?.[1]?.trim(),
   }
+}
+
+function asOptionalBoolean(value: unknown): boolean | undefined {
+  return typeof value === 'boolean' ? value : undefined
+}
+
+/**
+ * why: `permissions`/`requires` are nested objects, unlike the flat scalars `readScalar` was
+ * built for — reusing regex here would risk repeating the block-scalar parsing bug this file
+ * already fixed once (see the comment above `readScalar`). This parses the same frontmatter
+ * block with the real `yaml` parser instead, kept isolated from `parseSkillFrontmatter` so the
+ * existing scalar extraction stays untouched. Malformed or missing blocks quietly yield
+ * `undefined` — shape correctness is CI's job (`tools/validate-skills.ts`), not the generator's.
+ */
+export function parseSkillPermissions(content: string): {
+  permissions?: SkillPermissions
+  requires?: SkillRequirements
+} {
+  const frontmatterMatch = content.match(/^---\n([\s\S]*?)\n---/)
+  if (!frontmatterMatch) return {}
+
+  let parsed: unknown
+  try {
+    parsed = YAML.parse(frontmatterMatch[1])
+  } catch {
+    return {}
+  }
+  if (!parsed || typeof parsed !== 'object') return {}
+
+  const fm = parsed as Record<string, unknown>
+  const result: { permissions?: SkillPermissions; requires?: SkillRequirements } = {}
+
+  const rawPermissions = fm.permissions
+  if (rawPermissions && typeof rawPermissions === 'object') {
+    const p = rawPermissions as Record<string, unknown>
+    const filesystem = p.filesystem as Record<string, unknown> | undefined
+    const shell = p.shell as Record<string, unknown> | undefined
+    const network = p.network as Record<string, unknown> | undefined
+    const git = p.git as Record<string, unknown> | undefined
+
+    result.permissions = {
+      ...(filesystem && typeof filesystem === 'object'
+        ? { filesystem: { read: asOptionalBoolean(filesystem.read), write: asOptionalBoolean(filesystem.write) } }
+        : {}),
+      ...(shell && typeof shell === 'object' ? { shell: { enabled: asOptionalBoolean(shell.enabled) } } : {}),
+      ...(network && typeof network === 'object' ? { network: { enabled: asOptionalBoolean(network.enabled) } } : {}),
+      ...(git && typeof git === 'object'
+        ? { git: { read: asOptionalBoolean(git.read), write: asOptionalBoolean(git.write) } }
+        : {}),
+    }
+  }
+
+  const rawRequires = fm.requires
+  if (rawRequires && typeof rawRequires === 'object') {
+    const mcp = (rawRequires as Record<string, unknown>).mcp
+    if (Array.isArray(mcp) && mcp.every((entry) => typeof entry === 'string')) {
+      result.requires = { mcp }
+    }
+  }
+
+  return result
 }
 
 export function getFilesInDirectory(dir: string): string[] {

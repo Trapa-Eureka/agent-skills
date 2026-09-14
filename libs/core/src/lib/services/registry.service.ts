@@ -27,7 +27,6 @@ type CachedSkillMeta = {
   downloadedAt: number
 }
 
-
 function getRegistryCachePath(ports: CorePorts): string {
   return join(getCacheDir(ports), REGISTRY_CACHE_FILENAME)
 }
@@ -211,11 +210,7 @@ function pruneEmptyDirectories(ports: CorePorts, dir: string, root: string): voi
  * Keeps `.skill-meta.json`. Runs only after a successful download so a failed
  * refresh never deletes the previous cache.
  */
-function pruneOrphanedSkillCacheFiles(
-  ports: CorePorts,
-  skillCachePath: string,
-  keepFiles: readonly string[],
-): void {
+function pruneOrphanedSkillCacheFiles(ports: CorePorts, skillCachePath: string, keepFiles: readonly string[]): void {
   const keep = new Set<string>([...keepFiles, SKILL_META_FILE])
   const cachedFiles = collectCachedFiles(ports, skillCachePath, skillCachePath)
 
@@ -390,6 +385,8 @@ export async function getRemoteSkills(ports: CorePorts): Promise<SkillInfo[]> {
     description: skill.description,
     path: isSkillCachedInternal(ports, skill.name) ? getSkillCachePath(ports, skill.name) : '',
     category: skill.category,
+    ...(skill.permissions ? { permissions: skill.permissions } : {}),
+    ...(skill.requires ? { requires: skill.requires } : {}),
   }))
 }
 

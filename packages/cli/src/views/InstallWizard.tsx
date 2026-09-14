@@ -147,7 +147,13 @@ export function InstallWizard({ onExit }: { onExit: () => void }) {
       )}
 
       {step === 4 && (
-        <InstallConfig onConfirm={handleConfigConfirm} onBack={back} initialMethod="copy" initialGlobal={false} />
+        <InstallConfig
+          onConfirm={handleConfigConfirm}
+          onBack={back}
+          initialMethod="copy"
+          initialGlobal={false}
+          skills={selectedSkills}
+        />
       )}
     </Box>
   )

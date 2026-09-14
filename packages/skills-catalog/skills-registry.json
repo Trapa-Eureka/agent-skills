@@ -1,5 +1,6 @@
 {
   "version": "1.0.0",
+  "schemaVersion": 1,
   "categories": {
     "architecture": {
       "name": "Architecture",
@@ -160,7 +161,28 @@
       ],
       "author": "Felipe Rodrigues - github.com/felipfr",
       "version": "1.0.0",
-      "contentHash": "959d64baef88617c3cd3273250de4eef5e0954d627a2c01708b23fd0f6e0f050"
+      "contentHash": "1ca257a6bdec8f078e4e5eceef16ce8d461213fbc7a1e409b84a07c8a0d0a412",
+      "permissions": {
+        "filesystem": {
+          "read": true,
+          "write": false
+        },
+        "shell": {
+          "enabled": false
+        },
+        "network": {
+          "enabled": false
+        },
+        "git": {
+          "read": false,
+          "write": false
+        }
+      },
+      "requires": {
+        "mcp": [
+          "aws-documentation"
+        ]
+      }
     },
     {
       "name": "best-practices",
@@ -774,7 +796,28 @@
       ],
       "author": "github.com/openai/skills",
       "version": "1.0.0",
-      "contentHash": "5da2000639e7aee302556408a161168b8955758da0da3305842e14a93a40a7b7"
+      "contentHash": "eac820ebf3abdeaa88f3bfe16e53ec1c96a965a013fde9184381354bdba869b1",
+      "permissions": {
+        "filesystem": {
+          "read": true,
+          "write": true
+        },
+        "shell": {
+          "enabled": false
+        },
+        "network": {
+          "enabled": false
+        },
+        "git": {
+          "read": false,
+          "write": false
+        }
+      },
+      "requires": {
+        "mcp": [
+          "figma"
+        ]
+      }
     },
     {
       "name": "figma-implement-design",
@@ -1081,7 +1124,25 @@
       "files": [
         "SKILL.md"
       ],
-      "contentHash": "ddb5bf9bd2a5ca0eac8fa01632a19569baed922201b2cc501975edd77697f75c"
+      "contentHash": "225060a6d1a31540b6a2bde26830652237603b625e887f311be8d313a36c10de",
+      "permissions": {
+        "filesystem": {
+          "read": true,
+          "write": true
+        },
+        "shell": {
+          "enabled": true
+        },
+        "git": {
+          "read": true,
+          "write": true
+        }
+      },
+      "requires": {
+        "mcp": [
+          "nx-cloud"
+        ]
+      }
     },
     {
       "name": "nx-generate",
@@ -1375,7 +1436,23 @@
       ],
       "author": "github.com/openai/skills",
       "version": "1.0.0",
-      "contentHash": "b2d22a5612b4b1871c4d33765f8ee875ffc7eb3604cc9f2faabb1ff3c0c527ea"
+      "contentHash": "faab47e32bc535ce51e7b54acaf6a3367be54f720d2525aa68a1cc8caf26a001",
+      "permissions": {
+        "filesystem": {
+          "read": true,
+          "write": true
+        },
+        "shell": {
+          "enabled": true
+        },
+        "network": {
+          "enabled": true
+        },
+        "git": {
+          "read": true,
+          "write": false
+        }
+      }
     },
     {
       "name": "sales-motion-design",
@@ -1519,7 +1596,23 @@
       ],
       "author": "Chad Boyda / agent-gtm-skills",
       "version": "1.0.0",
-      "contentHash": "7cc6fba77aff372c64d8e2b97b2b645ef641ef78a266b602e5e6fdd74231460e"
+      "contentHash": "0f4f9229b6b3b3c465e754498cd702b3b93ccc01d556b9fb0a48fa86d36e5c73",
+      "permissions": {
+        "filesystem": {
+          "read": false,
+          "write": false
+        },
+        "shell": {
+          "enabled": false
+        },
+        "network": {
+          "enabled": false
+        },
+        "git": {
+          "read": false,
+          "write": false
+        }
+      }
     },
     {
       "name": "solo-founder-gtm",

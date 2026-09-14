@@ -6,7 +6,17 @@ metadata:
   modified_by: Felipe Rodrigues - github.com/felipfr
   source: https://github.com/chadboyda/agent-gtm-skills
   version: '1.0.0'
-
+permissions:
+  filesystem:
+    read: false
+    write: false
+  shell:
+    enabled: false
+  network:
+    enabled: false
+  git:
+    read: false
+    write: false
 ---
 
 # Social Selling Skill

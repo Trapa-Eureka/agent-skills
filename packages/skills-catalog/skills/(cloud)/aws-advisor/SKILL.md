@@ -5,6 +5,20 @@ license: CC-BY-4.0
 metadata:
   author: Felipe Rodrigues - github.com/felipfr
   version: '1.0.0'
+permissions:
+  filesystem:
+    read: true
+    write: false
+  shell:
+    enabled: false
+  network:
+    enabled: false
+  git:
+    read: false
+    write: false
+requires:
+  mcp:
+    - aws-documentation
 ---
 
 # AWS Advisor

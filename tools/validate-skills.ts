@@ -208,8 +208,89 @@ function validateSkill(skillPath: string): ValidationResult {
     )
   }
 
-  // --- Check 8: Body content ---
   const body = content.substring(content.indexOf(fmMatch[0]) + fmMatch[0].length)
+
+  // --- Check 7c: permissions / requires manifest (optional, backward compatible) ---
+  const isPlainObject = (value: unknown): value is Record<string, unknown> =>
+    !!value && typeof value === 'object' && !Array.isArray(value)
+  const isOptionalBoolean = (value: unknown): boolean => value === undefined || typeof value === 'boolean'
+
+  const permissions = fm.permissions
+  if (permissions === undefined) {
+    addCheck(
+      'permissions_present',
+      false,
+      "No 'permissions' field in frontmatter — consider declaring filesystem/shell/network/git access (see CONTRIBUTING.md)",
+      'warning',
+    )
+  } else if (!isPlainObject(permissions)) {
+    addCheck(
+      'permissions_shape_valid',
+      false,
+      "'permissions' must be a mapping, e.g. permissions: { shell: { enabled: true } }",
+    )
+  } else {
+    const sections: Array<{ key: string; fields: string[] }> = [
+      { key: 'filesystem', fields: ['read', 'write'] },
+      { key: 'shell', fields: ['enabled'] },
+      { key: 'network', fields: ['enabled'] },
+      { key: 'git', fields: ['read', 'write'] },
+    ]
+    let shapeValid = true
+    for (const { key, fields } of sections) {
+      const section = permissions[key]
+      if (section === undefined) continue
+      if (!isPlainObject(section) || fields.some((field) => !isOptionalBoolean(section[field]))) {
+        shapeValid = false
+        addCheck(
+          `permissions_${key}_shape`,
+          false,
+          `permissions.${key} must be an object with boolean field(s): ${fields.join(', ')}`,
+        )
+      }
+    }
+    if (shapeValid) addCheck('permissions_shape_valid', true, 'permissions field is well-formed')
+
+    // Narrow declared-vs-content consistency check — see docs/roadmap/IMPROVEMENT_ROADMAP.md (TASK 2).
+    // Deliberately scoped to shell/network only: filesystem/git heuristics have a much higher
+    // false-positive rate against prose (e.g. "edit the file" in an explanation) and are left
+    // for a future iteration rather than guessed at here.
+    const shellSection = isPlainObject(permissions.shell) ? permissions.shell : undefined
+    if (shellSection?.enabled === false && /```(bash|sh|zsh|shell)\b/i.test(body)) {
+      addCheck(
+        'permissions_shell_consistency',
+        false,
+        'permissions.shell.enabled is false, but the body contains a shell code block',
+        'warning',
+      )
+    }
+    const networkSection = isPlainObject(permissions.network) ? permissions.network : undefined
+    if (networkSection?.enabled === false && /\bcurl\s+https?:\/\/|\bfetch\(/i.test(body)) {
+      addCheck(
+        'permissions_network_consistency',
+        false,
+        'permissions.network.enabled is false, but the body appears to make network calls (curl/fetch)',
+        'warning',
+      )
+    }
+  }
+
+  const requires = fm.requires
+  if (requires !== undefined) {
+    if (!isPlainObject(requires)) {
+      addCheck('requires_shape_valid', false, "'requires' must be a mapping, e.g. requires: { mcp: [context7] }")
+    } else {
+      const mcp = requires.mcp
+      const mcpValid = mcp === undefined || (Array.isArray(mcp) && mcp.every((entry) => typeof entry === 'string'))
+      addCheck(
+        'requires_mcp_shape',
+        mcpValid,
+        mcpValid ? 'requires.mcp is well-formed' : "'requires.mcp' must be an array of strings",
+      )
+    }
+  }
+
+  // --- Check 8: Body content ---
   const bodyLines = body.trim().split('\n')
   const lineCount = bodyLines.length
 

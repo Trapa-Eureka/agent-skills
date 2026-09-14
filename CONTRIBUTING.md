@@ -180,6 +180,34 @@ Brief description.
 2. Step two
 ```
 
+### Permissions & Requirements (optional)
+
+Skills can optionally declare a machine-readable capability manifest so the CLI can show what a
+skill does before it's installed, and CI can flag an obvious mismatch between what's declared and
+what the skill's body actually does. Every field is optional — skills without this block behave
+exactly as before.
+
+```yaml
+permissions:
+  filesystem:
+    read: true
+    write: false
+  shell:
+    enabled: true
+  network:
+    enabled: false
+  git:
+    read: true
+    write: false
+requires:
+  mcp:
+    - context7
+```
+
+`tools/validate-skills.ts` warns (never fails CI) when `permissions` is missing, and flags a
+warning when `permissions.shell.enabled: false`/`permissions.network.enabled: false` looks
+inconsistent with a shell code block or `curl`/`fetch` call in the body.
+
 ### Category Metadata
 
 `_category.json`:

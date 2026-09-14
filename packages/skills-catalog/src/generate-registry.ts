@@ -11,6 +11,8 @@ import {
   computeSkillHash,
   getFilesInDirectory,
   parseSkillFrontmatter,
+  parseSkillPermissions,
+  REGISTRY_SCHEMA_VERSION,
   SKILL_NAME_SLUG_PATTERN,
   toSlug,
   type CategoryMetadata,
@@ -73,6 +75,7 @@ function scanSkillsInCategory(categoryPath: string, categoryId: string): SkillMe
 
     const content = readFileSync(skillMdPath, 'utf-8')
     const { name, description, author, version } = parseSkillFrontmatter(content)
+    const { permissions, requires } = parseSkillPermissions(content)
     const files = getFilesInDirectory(skillPath)
     const contentHash = computeSkillHash(skillPath, files)
     const relativePath = categoryId === 'uncategorized' ? entry.name : `(${categoryId})/${entry.name}`
@@ -90,6 +93,8 @@ function scanSkillsInCategory(categoryPath: string, categoryId: string): SkillMe
       author,
       version,
       contentHash,
+      ...(permissions ? { permissions } : {}),
+      ...(requires ? { requires } : {}),
     })
   }
 
@@ -160,6 +165,7 @@ function generateRegistry(): SkillsRegistry {
 
   return {
     version: '1.0.0',
+    schemaVersion: REGISTRY_SCHEMA_VERSION,
     categories,
     skills: skills.sort((a, b) => a.name.localeCompare(b.name)),
     ...(deprecated.length > 0 ? { deprecated } : {}),
