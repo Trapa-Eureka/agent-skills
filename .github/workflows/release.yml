@@ -29,11 +29,22 @@ jobs:
       NX_NO_CLOUD: ${{ github.event.pull_request.head.repo.full_name != github.repository }}
       NODE_OPTIONS: '--experimental-vm-modules'
       PARALLEL_JOBS: 8
+      # Same-repo (head.repo == base.repo) is a proxy for "trusted, so secrets are available" —
+      # true on the upstream repo, but not on a personal clone/fork used as a full working copy
+      # (this one included), which is same-repo by definition yet was never given its own
+      # SNYK_TOKEN. Check the secret itself rather than only the repo comparison.
+      HAS_SNYK_TOKEN: ${{ secrets.SNYK_TOKEN != '' }}
     steps:
+      # continue-on-error: forks (or other clones, like this one) of the upstream repo don't have
+      # RELEASE_APP_ID/RELEASE_APP_PRIVATE_KEY (an org-only GitHub App). Every downstream use of
+      # this step's output already falls back to `github.token` (see below), so let a token-
+      # generation failure degrade gracefully instead of hard-failing the whole job before the
+      # actual lint/test/build steps ever run.
       - name: Generate App Token
         if: github.event.pull_request.head.repo.full_name == github.repository
         uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
         id: app-token
+        continue-on-error: true
         with:
           app-id: ${{ secrets.RELEASE_APP_ID }}
           private-key: ${{ secrets.RELEASE_APP_PRIVATE_KEY }}
@@ -68,16 +79,16 @@ jobs:
 
       - name: Security Scan
         id: security-scan
-        if: github.event.pull_request.head.repo.full_name == github.repository
+        if: github.event.pull_request.head.repo.full_name == github.repository && env.HAS_SNYK_TOKEN == 'true'
         uses: ./.github/actions/security-scan
         with:
           snyk_token: ${{ secrets.SNYK_TOKEN }}
           artifact-name: security-scan-results-pr
 
-      - name: Note (fork PRs)
-        if: github.event.pull_request.head.repo.full_name != github.repository
+      - name: Note (scan skipped)
+        if: github.event.pull_request.head.repo.full_name != github.repository || env.HAS_SNYK_TOKEN != 'true'
         run: |
-          echo "Security scan is skipped for PRs from forks (GitHub does not expose secrets to fork workflows)."
+          echo "Security scan is skipped: PRs from forks never receive secrets, and this repository (fork or clone) has no SNYK_TOKEN configured."
           echo "Maintainers will run the scan before merge or you can run \`npm run scan\` locally with your own SNYK_TOKEN."
 
       - name: Comment on PR if scan failed
@@ -237,6 +248,10 @@ jobs:
       !startsWith(github.event.head_commit.message, 'chore(release):')
     env:
       PARALLEL_JOBS: 8
+      # See the identical guard + comment on the `ci` job above: this push-triggered job always
+      # runs "same-repo" by construction, but that doesn't mean SNYK_TOKEN is actually configured
+      # on every clone/fork that runs this workflow.
+      HAS_SNYK_TOKEN: ${{ secrets.SNYK_TOKEN != '' }}
     steps:
       - name: Checkout code
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -251,11 +266,18 @@ jobs:
 
       - name: Security Scan
         id: security-scan
+        if: env.HAS_SNYK_TOKEN == 'true'
         uses: ./.github/actions/security-scan
         with:
           snyk_token: ${{ secrets.SNYK_TOKEN }}
           artifact-name: security-scan-results
           retention-days: '30'
+
+      - name: Note (scan skipped)
+        if: env.HAS_SNYK_TOKEN != 'true'
+        run: |
+          echo "Security scan is skipped: no SNYK_TOKEN is configured for this repository."
+          echo "Set SNYK_TOKEN in repository secrets to enable it, or run \`npm run scan\` locally with your own token."
 
       - name: Notify on failure
         if: steps.security-scan.outputs.scan-outcome == 'failure'
