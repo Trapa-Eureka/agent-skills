@@ -26,6 +26,7 @@ program
   .option('-a, --agent <agents...>', 'Target specific agents')
   .option('--symlink', 'Use symlink instead of copy', false)
   .option('-f, --force', 'Force re-download skills (bypass cache)', false)
+  .option('-r, --registry <path>', 'Install from a local registry snapshot instead of the CDN (see `snapshot export`)')
   .action(async (options) => {
     if (shouldUseInteractiveMode(options)) {
       render(React.createElement(App, { command: 'install' }))
@@ -112,6 +113,19 @@ program
   .action(async (options) => {
     const { runCliAudit } = await import('./cli/audit')
     await runCliAudit(options)
+  })
+
+// Snapshot command (offline registry export/mirror)
+const snapshotCommand = program.command('snapshot').description('Manage offline registry snapshots')
+
+snapshotCommand
+  .command('export')
+  .description('Download the skills registry (or a subset) into a local directory for offline install')
+  .requiredOption('-o, --output <dir>', 'Directory to write the snapshot into')
+  .option('-s, --skill <names...>', 'Export only these skills (default: entire catalog)')
+  .action(async (options) => {
+    const { runCliSnapshotExport } = await import('./cli/snapshot')
+    await runCliSnapshotExport(options)
   })
 
 program.parse(process.argv)

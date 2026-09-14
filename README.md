@@ -79,16 +79,16 @@ Install skills to any of these AI coding agents:
 <div align="center">
 <br />
 
-|                     Tier 1 (Popular)                      |                            Tier 2 (Rising)                             |                   Tier 3 (Enterprise)                   |
-| :-------------------------------------------------------: | :--------------------------------------------------------------------: | :-----------------------------------------------------: |
-|         **[Claude Code](https://claude.ai/code)**         |                    **[Aider](https://aider.chat)**                     |   **[Amazon Q](https://aws.amazon.com/q/developer/)**   |
-|        **[Cline](https://github.com/cline/cline)**        |               **[Antigravity](https://idx.google.com)**                |       **[Augment](https://www.augmentcode.com)**        |
-|             **[Cursor](https://cursor.com)**              | **[Gemini CLI](https://ai.google.dev/gemini-api/docs/code-execution)** |    **[Droid (Factory.ai)](https://www.factory.ai)**     |
-| **[GitHub Copilot](https://github.com/features/copilot)** |                  **[Kilo Code](https://kilocode.ai)**                  |           **[OpenCode](https://opencode.ai)**           |
-|       **[Windsurf](https://codeium.com/windsurf)**        |                     **[Kiro](https://kiro.dev/)**                      |  **[Sourcegraph Cody](https://sourcegraph.com/cody)**   |
-|                                                           |    **[OpenAI Codex](https://openai.com/index/introducing-codex/)**     |         **[Tabnine](https://www.tabnine.com)**          |
-|                                                           |                    **[Roo Code](https://roo.dev)**                     |                                                         |
-|                                                           |                    **[TRAE](https://docs.trae.ai)**                    |                                                         |
+|                     Tier 1 (Popular)                      |                            Tier 2 (Rising)                             |                 Tier 3 (Enterprise)                  |
+| :-------------------------------------------------------: | :--------------------------------------------------------------------: | :--------------------------------------------------: |
+|         **[Claude Code](https://claude.ai/code)**         |                    **[Aider](https://aider.chat)**                     | **[Amazon Q](https://aws.amazon.com/q/developer/)**  |
+|        **[Cline](https://github.com/cline/cline)**        |               **[Antigravity](https://idx.google.com)**                |      **[Augment](https://www.augmentcode.com)**      |
+|             **[Cursor](https://cursor.com)**              | **[Gemini CLI](https://ai.google.dev/gemini-api/docs/code-execution)** |   **[Droid (Factory.ai)](https://www.factory.ai)**   |
+| **[GitHub Copilot](https://github.com/features/copilot)** |                  **[Kilo Code](https://kilocode.ai)**                  |         **[OpenCode](https://opencode.ai)**          |
+|       **[Windsurf](https://codeium.com/windsurf)**        |                     **[Kiro](https://kiro.dev/)**                      | **[Sourcegraph Cody](https://sourcegraph.com/cody)** |
+|                                                           |    **[OpenAI Codex](https://openai.com/index/introducing-codex/)**     |        **[Tabnine](https://www.tabnine.com)**        |
+|                                                           |                    **[Roo Code](https://roo.dev)**                     |                                                      |
+|                                                           |                    **[TRAE](https://docs.trae.ai)**                    |                                                      |
 
 </div>
 
@@ -187,6 +187,13 @@ agent-skills remove -s my-skill --force
 agent-skills cache --clear           # Clear all cache
 agent-skills cache --clear-registry  # Clear only registry
 agent-skills cache --path            # Show cache location
+
+# Export an offline snapshot (whole catalog, or just what you name)
+agent-skills snapshot export -o ./offline-mirror
+agent-skills snapshot export -o ./offline-mirror -s aws-advisor coding-guidelines
+
+# Install from a snapshot instead of the CDN — no network access needed
+agent-skills install --registry ./offline-mirror -s aws-advisor
 
 # View audit log
 agent-skills audit                   # Show recent operations
