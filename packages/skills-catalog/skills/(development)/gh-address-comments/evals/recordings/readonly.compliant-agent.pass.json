@@ -1,5 +1,5 @@
 {
-  "agentId": "compliant-agent",
+  "agentId": "claude-code",
   "rawOutput": "Checked gh auth status, fetched PR comments, and summarized them without modifying anything.",
   "toolCalls": [
     { "kind": "bash", "detail": "gh auth status" },

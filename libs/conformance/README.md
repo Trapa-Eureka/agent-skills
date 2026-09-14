@@ -2,7 +2,8 @@
 
 Cross-agent behavioral conformance harness (TASK 1 of `docs/roadmap/IMPROVEMENT_ROADMAP.md`),
 extended by TASK 4 (Behavioral Evaluation Framework) into a catalog-wide, CI-checked regression
-suite.
+suite, and by TASK 5 (Skill-Level Compatibility Matrix) into a source of per-agent compatibility
+data for the registry.
 
 Runs a skill scenario through multiple agent CLI adapters and checks whether each execution
 satisfies the same declared behavioral invariants — not whether the agents produced identical
@@ -80,3 +81,30 @@ packages/skills-catalog/skills/(category)/skill-name/
 - There is no live-agent mode in CI — recordings are how a maintainer captures what agent
   behavior currently looks like (by hand, or from a real `ClaudeCodeCliAdapter`/`CodexCliAdapter`
   run) so future changes to the skill or the checkers can be caught mechanically.
+
+## Compatibility Matrix (TASK 5)
+
+`skills-registry.json` publishes a `compatibility` field per skill, derived automatically from
+the same evals above — no separate authoring step. The rule (`deriveCompatibility()` in
+`compatibility-matrix.ts`): an agent is marked `tested` for a skill when at least one of its
+recordings both declares `expected: pass` and currently matches that expectation. Recordings
+expected to `fail` (negative/regression fixtures) and recordings that are currently regressed
+never count — only a recording that verifiably demonstrates compliant behavior does.
+
+The signal comes from the recorded transcript's own `agentId` field (`RawAgentExecution.agentId`),
+**not** the recording's filename — so giving a `pass`-expected recording a real `AgentType` id
+(e.g. `"agentId": "claude-code"`) is enough to make it count; the filename-derived
+`recording-id`/label used for CI reporting is unaffected and can stay descriptive
+(`compliant-agent`, etc.). `generate-registry.ts` filters out any `agentId` that isn't a real
+`AgentType` before writing to the registry, so illustrative labels never leak into published
+compatibility data.
+
+**Honesty caveat**: `tested` means "covered by this repo's recorded regression fixtures right
+now" — not "verified against a live run of that agent." As documented above, these fixtures are
+typically hand-authored, not captured from a real CLI session (no live agent access in this
+environment/CI). Treat the compatibility matrix as "our recorded understanding of this skill's
+behavior for this agent is internally consistent," not as an external certification.
+
+A skill with no `evals/` (or none of its recordings resolve to a real agent id) simply has no
+`compatibility` field in the registry — never a false "untested"/"incompatible" claim, matching
+the same absence-is-not-a-claim discipline as `permissions` (TASK 2).

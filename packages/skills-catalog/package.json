@@ -18,6 +18,8 @@
     "skills/"
   ],
   "devDependencies": {
+    "@tech-leads-club/conformance": "0.0.1",
+    "@tech-leads-club/core": "0.0.1",
     "chalk": "^5.6.2",
     "sigstore": "^4.1.1"
   }

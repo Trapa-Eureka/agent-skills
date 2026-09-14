@@ -1,5 +1,5 @@
 {
-  "agentId": "compliant-agent",
+  "agentId": "codex",
   "rawOutput": "Inspected the repository structure and entry points, then summarized likely trust boundaries without writing any files.",
   "toolCalls": [
     { "kind": "read_file", "detail": "package.json" },

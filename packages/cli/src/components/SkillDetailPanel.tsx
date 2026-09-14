@@ -5,9 +5,11 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 
 import {
   parseMarkdown,
+  summarizeCompatibility,
   summarizeMcpRequirements,
   summarizePermissions,
   type MarkdownToken,
+  type SkillCompatibility,
   type SkillPermissions,
   type SkillRequirements,
 } from '@tech-leads-club/core'
@@ -100,13 +102,28 @@ function formatPermissionsLine(permissions?: SkillPermissions, requires?: SkillR
   return [permissionsPart, mcpPart].filter(Boolean).join('  ')
 }
 
+function formatCompatibilityLine(compatibility?: SkillCompatibility): string | null {
+  if (!compatibility) return null
+
+  const tested = summarizeCompatibility(compatibility)
+  if (tested.length === 0) return null
+
+  return `${fmt.granted('✓')} Tested with: ${tested.join(', ')}`
+}
+
 const MetadataHeader = React.memo(
   ({
     skill,
     metadata,
   }: {
     skill: SkillInfo
-    metadata: { author?: string; files: string[]; permissions?: SkillPermissions; requires?: SkillRequirements } | null
+    metadata: {
+      author?: string
+      files: string[]
+      permissions?: SkillPermissions
+      requires?: SkillRequirements
+      compatibility?: SkillCompatibility
+    } | null
   }) => {
     const categoryColor = getColorForCategory(skill.category ?? 'default')
     const author = metadata?.author ? ` ${symbols.dot} @${metadata.author}` : ''
@@ -114,6 +131,7 @@ const MetadataHeader = React.memo(
       ? ` ${symbols.dot} ${metadata.files.length} file${metadata.files.length !== 1 ? 's' : ''}`
       : ''
     const permissionsLine = formatPermissionsLine(metadata?.permissions, metadata?.requires)
+    const compatibilityLine = formatCompatibilityLine(metadata?.compatibility)
 
     return (
       <Box flexDirection="column" marginBottom={1}>
@@ -133,6 +151,7 @@ const MetadataHeader = React.memo(
           {skill.description}
         </Text>
         {permissionsLine && <Text>{permissionsLine}</Text>}
+        {compatibilityLine && <Text>{compatibilityLine}</Text>}
       </Box>
     )
   },

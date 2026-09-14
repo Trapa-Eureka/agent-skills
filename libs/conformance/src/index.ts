@@ -3,6 +3,7 @@
  */
 export * from './lib/adapters'
 export * from './lib/catalog-discovery'
+export * from './lib/compatibility-matrix'
 export * from './lib/evaluator'
 export * from './lib/harness'
 export * from './lib/invariants'

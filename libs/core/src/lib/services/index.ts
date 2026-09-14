@@ -4,6 +4,7 @@
 export * from './agents.service'
 export * from './audit-log.service'
 export * from './categories.service'
+export * from './compatibility.service'
 export * from './global-path.service'
 export * from './installer.service'
 export * from './lockfile.service'
