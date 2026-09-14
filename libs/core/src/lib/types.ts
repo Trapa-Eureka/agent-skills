@@ -109,6 +109,63 @@ export interface AgentConfig {
 }
 
 /**
+ * Machine-readable capability flags declared by a skill, mirroring the `permissions:` block in
+ * its `SKILL.md` frontmatter. Every field is optional: an absent field means "not declared" and
+ * must not be read as either granted or denied — see {@link summarizePermissions} for the
+ * three-state rendering this distinction requires.
+ *
+ * @example
+ * ```ts
+ * const permissions: SkillPermissions = {
+ *   filesystem: { read: true, write: false },
+ *   shell: { enabled: true },
+ *   network: { enabled: false },
+ *   git: { read: true, write: false },
+ * }
+ * ```
+ */
+export interface SkillPermissions {
+  /** Filesystem access declared by the skill. */
+  filesystem?: {
+    /** Whether the skill reads files outside its own directory. */
+    read?: boolean
+    /** Whether the skill writes or edits files. */
+    write?: boolean
+  }
+  /** Shell command execution declared by the skill. */
+  shell?: {
+    /** Whether the skill runs shell commands. */
+    enabled?: boolean
+  }
+  /** Network access declared by the skill. */
+  network?: {
+    /** Whether the skill makes network requests. */
+    enabled?: boolean
+  }
+  /** Git operations declared by the skill. */
+  git?: {
+    /** Whether the skill reads git state (log, diff, status, ...). */
+    read?: boolean
+    /** Whether the skill writes git state (commit, push, ...). */
+    write?: boolean
+  }
+}
+
+/**
+ * External dependencies declared by a skill, mirroring the `requires:` block in its `SKILL.md`
+ * frontmatter.
+ *
+ * @example
+ * ```ts
+ * const requires: SkillRequirements = { mcp: ['context7'] }
+ * ```
+ */
+export interface SkillRequirements {
+  /** MCP server names the skill depends on. */
+  mcp?: string[]
+}
+
+/**
  * Minimal skill information used across discovery and install flows.
  *
  * @example
@@ -130,6 +187,10 @@ export interface SkillInfo {
   path: string
   /** Optional category identifier. */
   category?: string
+  /** Optional declared capability manifest, when the skill's frontmatter declares one. */
+  permissions?: SkillPermissions
+  /** Optional declared external dependencies, when the skill's frontmatter declares one. */
+  requires?: SkillRequirements
 }
 
 /**
@@ -334,6 +395,10 @@ export interface SkillMetadata {
   version?: string
   /** Optional content hash used for cache validation. */
   contentHash?: string
+  /** Optional declared capability manifest, when the skill's frontmatter declares one. */
+  permissions?: SkillPermissions
+  /** Optional declared external dependencies, when the skill's frontmatter declares one. */
+  requires?: SkillRequirements
 }
 
 /**
@@ -343,6 +408,7 @@ export interface SkillMetadata {
  * ```ts
  * const registry: SkillsRegistry = {
  *   version: '1.0.0',
+ *   schemaVersion: 1,
  *   generatedAt: '2026-03-05T12:00:00.000Z',
  *   baseUrl: 'https://cdn.example.com/skills',
  *   categories: {
@@ -356,6 +422,8 @@ export interface SkillMetadata {
 export interface SkillsRegistry {
   /** Registry package version or CDN ref. */
   version: string
+  /** Registry payload schema version, for forward-compatible parsing by older CLIs. */
+  schemaVersion?: number
   /** ISO timestamp when the registry was generated. */
   generatedAt: string
   /** Base URL used to resolve registry assets. */

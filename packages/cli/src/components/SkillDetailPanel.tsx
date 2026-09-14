@@ -3,9 +3,16 @@ import { Box, Text, useInput, useStdout } from 'ink'
 import Spinner from 'ink-spinner'
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 
+import {
+  parseMarkdown,
+  summarizeMcpRequirements,
+  summarizePermissions,
+  type MarkdownToken,
+  type SkillPermissions,
+  type SkillRequirements,
+} from '@tech-leads-club/core'
 import { useSkillContent } from '../hooks/useSkillContent'
 import { getColorForCategory } from '../services/category-colors'
-import { parseMarkdown, type MarkdownToken } from '@tech-leads-club/core'
 import { colors, symbols } from '../theme'
 import type { SkillInfo } from '../types'
 
@@ -31,6 +38,8 @@ const fmt = {
   bold: (s: string) => chalk.hex(colors.text).bold(s),
   dim: (s: string) => chalk.dim(s),
   indicator: (s: string) => chalk.hex(colors.textDim)(s),
+  granted: (s: string) => chalk.hex(colors.success)(s),
+  denied: (s: string) => chalk.hex(colors.error)(s),
 }
 
 function formatInline(text: string): string {
@@ -76,13 +85,35 @@ function tokensToLines(tokens: MarkdownToken[]): string[] {
   return lines
 }
 
+function formatPermissionsLine(permissions?: SkillPermissions, requires?: SkillRequirements): string | null {
+  if (!permissions && !requires) return null
+
+  const glyphs = { granted: fmt.granted('✓'), denied: fmt.denied('✗'), unspecified: fmt.muted('—') }
+  const permissionsPart = permissions
+    ? summarizePermissions(permissions)
+        .map((line) => `${glyphs[line.state]} ${line.label}`)
+        .join('  ')
+    : ''
+  const mcpNames = summarizeMcpRequirements(requires)
+  const mcpPart = mcpNames.length ? `${symbols.dot} MCP: ${mcpNames.join(', ')}` : ''
+
+  return [permissionsPart, mcpPart].filter(Boolean).join('  ')
+}
+
 const MetadataHeader = React.memo(
-  ({ skill, metadata }: { skill: SkillInfo; metadata: { author?: string; files: string[] } | null }) => {
+  ({
+    skill,
+    metadata,
+  }: {
+    skill: SkillInfo
+    metadata: { author?: string; files: string[]; permissions?: SkillPermissions; requires?: SkillRequirements } | null
+  }) => {
     const categoryColor = getColorForCategory(skill.category ?? 'default')
     const author = metadata?.author ? ` ${symbols.dot} @${metadata.author}` : ''
     const files = metadata?.files?.length
       ? ` ${symbols.dot} ${metadata.files.length} file${metadata.files.length !== 1 ? 's' : ''}`
       : ''
+    const permissionsLine = formatPermissionsLine(metadata?.permissions, metadata?.requires)
 
     return (
       <Box flexDirection="column" marginBottom={1}>
@@ -101,6 +132,7 @@ const MetadataHeader = React.memo(
         <Text color={colors.textDim} wrap="truncate">
           {skill.description}
         </Text>
+        {permissionsLine && <Text>{permissionsLine}</Text>}
       </Box>
     )
   },

@@ -1,15 +1,19 @@
+import { summarizeMcpRequirements, summarizePermissions, type PermissionState } from '@tech-leads-club/core'
 import { Box, Text, useInput } from 'ink'
 import { useState } from 'react'
 
 import { Header } from '../components/Header'
 import { SelectPrompt } from '../components/SelectPrompt'
 import { colors, symbols } from '../theme'
+import type { SkillInfo } from '../types'
 
 interface InstallConfigProps {
   onConfirm: (config: { method: 'copy' | 'symlink'; global: boolean }) => void
   onBack: () => void
   initialMethod?: 'copy' | 'symlink'
   initialGlobal?: boolean
+  /** Skills about to be installed, used to render a permission summary before confirming. */
+  skills?: SkillInfo[]
 }
 
 export function InstallConfig({
@@ -17,6 +21,7 @@ export function InstallConfig({
   onBack,
   initialMethod = 'copy',
   initialGlobal = false,
+  skills = [],
 }: InstallConfigProps) {
   const [step, setStep] = useState<'method' | 'scope' | 'confirm'>('method')
   const [method, setMethod] = useState<'copy' | 'symlink'>(initialMethod)
@@ -74,20 +79,72 @@ export function InstallConfig({
     <InstallSummary
       method={method}
       isGlobal={isGlobal}
+      skills={skills}
       onConfirm={() => onConfirm({ method, global: isGlobal })}
       onBack={() => setStep('scope')}
     />
   )
 }
 
+/**
+ * Combines the union of every state across all selected skills into one: `granted` if any
+ * skill declares it, else `denied` if any skill explicitly declares it off, else `unspecified`.
+ * This is a summary for a multi-skill install, not a per-skill audit — it exists so the user
+ * sees "could this batch do X" before confirming, not "does every skill do X".
+ */
+function unionState(states: PermissionState[]): PermissionState {
+  if (states.some((state) => state === 'granted')) return 'granted'
+  if (states.some((state) => state === 'denied')) return 'denied'
+  return 'unspecified'
+}
+
+function PermissionsPreview({ skills }: { skills: SkillInfo[] }) {
+  const declaredSkills = skills.filter((skill) => skill.permissions || skill.requires)
+  if (declaredSkills.length === 0) return null
+
+  const glyphs: Record<PermissionState, { icon: string; color: string }> = {
+    granted: { icon: symbols.check, color: colors.success },
+    denied: { icon: symbols.cross, color: colors.textMuted },
+    unspecified: { icon: '—', color: colors.textMuted },
+  }
+
+  const lines = summarizePermissions(undefined).map((_, index) => {
+    const perSkillStates = declaredSkills.map((skill) => summarizePermissions(skill.permissions)[index])
+    return { label: perSkillStates[0]?.label ?? '', state: unionState(perSkillStates.map((line) => line.state)) }
+  })
+
+  const mcpNames = [...new Set(declaredSkills.flatMap((skill) => summarizeMcpRequirements(skill.requires)))]
+  const undeclaredCount = skills.length - declaredSkills.length
+
+  return (
+    <Box flexDirection="column" marginTop={1}>
+      <Text color={colors.textDim}>
+        Permissions {symbols.dot} {declaredSkills.length}/{skills.length} skills declare a manifest
+        {undeclaredCount > 0 ? ` (${undeclaredCount} undeclared)` : ''}
+      </Text>
+      <Box>
+        {lines.map((line) => (
+          <Text key={line.label}>
+            <Text color={glyphs[line.state].color}>{glyphs[line.state].icon}</Text>
+            <Text color={colors.textDim}> {line.label} </Text>
+          </Text>
+        ))}
+      </Box>
+      {mcpNames.length > 0 && <Text color={colors.textDim}>MCP: {mcpNames.join(', ')}</Text>}
+    </Box>
+  )
+}
+
 function InstallSummary({
   method,
   isGlobal,
+  skills,
   onConfirm,
   onBack,
 }: {
   method: string
   isGlobal: boolean
+  skills: SkillInfo[]
   onConfirm: () => void
   onBack: () => void
 }) {
@@ -132,6 +189,8 @@ function InstallSummary({
             {symbols.dot} {isGlobal ? 'User home' : 'This project'}
           </Text>
         </Box>
+
+        <PermissionsPreview skills={skills} />
       </Box>
 
       <Box marginTop={1} borderStyle="round" borderColor={colors.border} paddingX={1}>

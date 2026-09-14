@@ -101,6 +101,11 @@ function extractCategoryId(folderName: string): string | null {
   return match?.[1] ?? null
 }
 
+// Known gap: local (monorepo dev-mode) skill discovery does not yet parse `permissions`/
+// `requires` from frontmatter, unlike `getRemoteSkills` in registry.service.ts — so
+// `SkillInfo.permissions`/`.requires` stay undefined for skills discovered this way. Local
+// mode is only used when running the CLI from within this repo (SKILLS_CATALOG_DIR present);
+// end users installing via the published CLI always go through the remote registry path.
 function parseSkillFrontmatter(content: string): { name?: string; description?: string } {
   const frontmatterMatch = content.match(/^---\n([\s\S]*?)\n---/)
   if (!frontmatterMatch) return {}

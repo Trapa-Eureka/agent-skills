@@ -4,6 +4,17 @@ description: Deploy applications to Render by analyzing codebases, generating re
 metadata:
   author: github.com/openai/skills
   version: '1.0.0'
+permissions:
+  filesystem:
+    read: true
+    write: true
+  shell:
+    enabled: true
+  network:
+    enabled: true
+  git:
+    read: true
+    write: false
 ---
 
 # Deploy to Render
