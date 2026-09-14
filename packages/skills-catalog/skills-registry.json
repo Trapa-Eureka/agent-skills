@@ -881,7 +881,12 @@
       ],
       "author": "github.com/openai/skills",
       "version": "1.0.0",
-      "contentHash": "282d3825f43cc72f41d00547332be2b4c84818f167de9792df7858518c5beef0"
+      "contentHash": "49ca5d63e8981c8b3d86a790a4024946267463cf200779ed457fa1aba0151d5d",
+      "compatibility": {
+        "claude-code": {
+          "status": "tested"
+        }
+      }
     },
     {
       "name": "gh-fix-ci",
@@ -1527,7 +1532,12 @@
       ],
       "author": "github.com/openai/skills",
       "version": "1.0.0",
-      "contentHash": "38384ad3e27d0479300a252f9af64527a10ba2b8349946116e0411aa18a49cfa"
+      "contentHash": "625c01a0ca48876bf57128dbfc36775c9aecd82d594a297b78d03fc4336a4505",
+      "compatibility": {
+        "codex": {
+          "status": "tested"
+        }
+      }
     },
     {
       "name": "sentry",

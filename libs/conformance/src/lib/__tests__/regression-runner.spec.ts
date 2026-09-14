@@ -39,6 +39,9 @@ describe('runRecordedRegressions', () => {
     expect(results.every((result) => result.matched)).toBe(true)
     expect(results.find((r) => r.recordingId === 'compliant-agent')?.actual).toBe('PASS')
     expect(results.find((r) => r.recordingId === 'violating-agent')?.actual).toBe('FAIL')
+    // agentId comes from the recorded transcript's own field, not the filename-derived recordingId.
+    expect(results.find((r) => r.recordingId === 'compliant-agent')?.agentId).toBe('mock-compliant')
+    expect(results.find((r) => r.recordingId === 'violating-agent')?.agentId).toBe('mock-violating')
   })
 
   it('flags a mismatch as a regression when the actual verdict disagrees with the filename', async () => {

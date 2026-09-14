@@ -14,6 +14,8 @@ export interface RegressionResult {
   scenarioName: string
   /** Recording label, from the filename. */
   recordingId: string
+  /** The recorded transcript's own `agentId` field — the compatibility-matrix signal (TASK 5). */
+  agentId: string
   /** Verdict the filename declares this recording must produce. */
   expected: ExpectedVerdict
   /** Verdict the harness actually produced for this replay. */
@@ -56,6 +58,7 @@ export async function runRecordedRegressions(suite: SkillEvalSuite): Promise<Reg
       skillDir: suite.skillDir,
       scenarioName,
       recordingId: recording.recordingId,
+      agentId: execution.agentId,
       expected: recording.expected,
       actual,
       matched: toExpectedVerdict(actual) === recording.expected,

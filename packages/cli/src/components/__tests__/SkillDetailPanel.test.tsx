@@ -7,6 +7,8 @@ jest.mock('../../services/category-colors', () => ({
 }))
 
 jest.mock('@tech-leads-club/core', () => ({
+  summarizeCompatibility: (compatibility?: Record<string, { status: string }>) =>
+    compatibility ? Object.keys(compatibility).filter((id) => compatibility[id]?.status === 'tested') : [],
   parseMarkdown: (raw: string) => {
     const lines = raw
       .replace(/^---[\s\S]*?---\n*/m, '')

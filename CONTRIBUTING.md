@@ -217,6 +217,12 @@ exact `evals/scenarios/*.yaml` + `evals/recordings/*.json` layout. Checked on ev
 `nx run conformance:run-catalog-evals` (no secrets or live agent CLI required). A skill with no
 `evals/` folder is unaffected — this is opt-in, same as the permissions manifest above.
 
+If a `pass`-expected recording's `agentId` field (inside the JSON, not the filename) is set to a
+real agent id (e.g. `"agentId": "claude-code"`), the registry's generated `compatibility` field
+picks it up automatically — see
+[`libs/conformance/README.md`](libs/conformance/README.md#compatibility-matrix-task-5) for exactly
+what "tested" means and its honesty caveat. No separate authoring step is needed.
+
 ### Category Metadata
 
 `_category.json`:

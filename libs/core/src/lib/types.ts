@@ -166,6 +166,30 @@ export interface SkillRequirements {
 }
 
 /**
+ * Compatibility status for one agent against one skill. Only `'tested'` exists today: derived
+ * from the skill's recorded behavioral evals (see `@tech-leads-club/conformance`'s
+ * `deriveCompatibility`) when at least one recording attributed to that agent both declares a
+ * `pass` expectation and currently matches it. This does not imply the skill was verified
+ * against a live run of that agent — recordings may be hand-authored fixtures; see
+ * `libs/conformance/README.md`.
+ */
+export type CompatibilityStatus = 'tested'
+
+/**
+ * Per-agent compatibility signal for a skill, keyed by {@link AgentType}. Absent entries mean
+ * "not (yet) tested", never "incompatible" — the same non-inference-from-absence discipline as
+ * {@link SkillPermissions}.
+ *
+ * @example
+ * ```ts
+ * const compatibility: SkillCompatibility = {
+ *   'claude-code': { status: 'tested' },
+ * }
+ * ```
+ */
+export type SkillCompatibility = Partial<Record<AgentType, { status: CompatibilityStatus }>>
+
+/**
  * Minimal skill information used across discovery and install flows.
  *
  * @example
@@ -191,6 +215,8 @@ export interface SkillInfo {
   permissions?: SkillPermissions
   /** Optional declared external dependencies, when the skill's frontmatter declares one. */
   requires?: SkillRequirements
+  /** Optional per-agent compatibility signal, derived from the skill's recorded evals. */
+  compatibility?: SkillCompatibility
 }
 
 /**
@@ -399,6 +425,8 @@ export interface SkillMetadata {
   permissions?: SkillPermissions
   /** Optional declared external dependencies, when the skill's frontmatter declares one. */
   requires?: SkillRequirements
+  /** Optional per-agent compatibility signal, derived from the skill's recorded evals. */
+  compatibility?: SkillCompatibility
 }
 
 /**

@@ -1,5 +1,7 @@
 #!/usr/bin/env tsx
 
+import { deriveCompatibility, discoverSkillEvals, runRecordedRegressions } from '@tech-leads-club/conformance'
+import { AGENT_TYPES, type AgentType, type SkillCompatibility } from '@tech-leads-club/core'
 import { existsSync, readdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
@@ -27,6 +29,30 @@ const __dirname = dirname(__filename)
 const SKILLS_DIR = join(__dirname, '..', 'skills')
 const OUTPUT_FILE = join(__dirname, '..', 'skills-registry.json')
 const DEPRECATED_FILE = join(SKILLS_DIR, 'deprecated.yaml')
+const AGENT_TYPE_SET: ReadonlySet<string> = new Set(AGENT_TYPES)
+
+/**
+ * Runs every skill's recorded behavioral evals (TASK 4) and derives a per-skill compatibility
+ * signal from the results (TASK 5), filtered down to recognized {@link AgentType} ids — a
+ * recording's `agentId` is free text (see `libs/conformance/README.md`), so an unrecognized
+ * value (e.g. this repo's own illustrative `violating-agent` fixture label) is silently dropped
+ * here rather than published to the registry.
+ */
+async function computeCompatibilityBySkill(): Promise<Map<string, SkillCompatibility>> {
+  const suites = discoverSkillEvals(SKILLS_DIR)
+  const results = (await Promise.all(suites.map((suite) => runRecordedRegressions(suite)))).flat()
+  const raw = deriveCompatibility(results)
+
+  const filtered = new Map<string, SkillCompatibility>()
+  for (const [skillDir, rawCompatibility] of raw) {
+    const compatibility: SkillCompatibility = {}
+    for (const [agentId, entry] of Object.entries(rawCompatibility)) {
+      if (AGENT_TYPE_SET.has(agentId)) compatibility[agentId as AgentType] = entry
+    }
+    if (Object.keys(compatibility).length > 0) filtered.set(skillDir, compatibility)
+  }
+  return filtered
+}
 
 function isCategoryFolder(name: string): boolean {
   return CATEGORY_FOLDER_PATTERN.test(name)
@@ -59,7 +85,11 @@ function loadCategoryMetadata(): Record<string, CategoryMetadata> {
   }
 }
 
-function scanSkillsInCategory(categoryPath: string, categoryId: string): SkillMetadata[] {
+function scanSkillsInCategory(
+  categoryPath: string,
+  categoryId: string,
+  compatibilityBySkill: Map<string, SkillCompatibility>,
+): SkillMetadata[] {
   const skills: SkillMetadata[] = []
   if (!existsSync(categoryPath)) return skills
 
@@ -81,6 +111,7 @@ function scanSkillsInCategory(categoryPath: string, categoryId: string): SkillMe
     const relativePath = categoryId === 'uncategorized' ? entry.name : `(${categoryId})/${entry.name}`
     const rawName = name || entry.name
     const skillName = SKILL_NAME_SLUG_PATTERN.test(rawName) ? rawName : toSlug(rawName)
+    const compatibility = compatibilityBySkill.get(entry.name)
 
     if (skillName !== rawName) fixSkillNameInFile(skillMdPath, rawName, skillName)
 
@@ -95,6 +126,7 @@ function scanSkillsInCategory(categoryPath: string, categoryId: string): SkillMe
       contentHash,
       ...(permissions ? { permissions } : {}),
       ...(requires ? { requires } : {}),
+      ...(compatibility ? { compatibility } : {}),
     })
   }
 
@@ -122,10 +154,11 @@ function loadDeprecatedSkills(): DeprecatedEntry[] {
   }
 }
 
-function generateRegistry(): SkillsRegistry {
+async function generateRegistry(): Promise<SkillsRegistry> {
   const skills: SkillMetadata[] = []
   const categories = loadCategoryMetadata()
   const deprecated = loadDeprecatedSkills()
+  const compatibilityBySkill = await computeCompatibilityBySkill()
 
   const entries = readdirSync(SKILLS_DIR, { withFileTypes: true })
 
@@ -136,7 +169,7 @@ function generateRegistry(): SkillsRegistry {
       const categoryId = extractCategoryId(entry.name)
       if (categoryId) {
         const categoryPath = join(SKILLS_DIR, entry.name)
-        const categorySkills = scanSkillsInCategory(categoryPath, categoryId)
+        const categorySkills = scanSkillsInCategory(categoryPath, categoryId, compatibilityBySkill)
         skills.push(...categorySkills)
 
         // Ensure category exists in metadata
@@ -150,7 +183,7 @@ function generateRegistry(): SkillsRegistry {
       // Uncategorized skill at root — reuse scanSkillsInCategory with 'uncategorized'
       const skillDir = join(SKILLS_DIR, entry.name)
       if (existsSync(join(skillDir, 'SKILL.md'))) {
-        skills.push(...scanSkillsInCategory(skillDir, 'uncategorized'))
+        skills.push(...scanSkillsInCategory(skillDir, 'uncategorized', compatibilityBySkill))
       }
     }
   }
@@ -181,7 +214,7 @@ function fixSkillNameInFile(skillMdPath: string, rawName: string, slugName: stri
 }
 
 // Main execution
-const registry = generateRegistry()
+const registry = await generateRegistry()
 writeFileSync(OUTPUT_FILE, JSON.stringify(registry, null, 2))
 
 console.log(`✅ Generated skills-registry.json`)

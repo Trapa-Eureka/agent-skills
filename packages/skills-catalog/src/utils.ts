@@ -1,4 +1,4 @@
-import type { DeprecatedEntry, SkillPermissions, SkillRequirements } from '@tech-leads-club/core'
+import type { DeprecatedEntry, SkillCompatibility, SkillPermissions, SkillRequirements } from '@tech-leads-club/core'
 import { createHash } from 'node:crypto'
 import { existsSync, readdirSync, readFileSync } from 'node:fs'
 import { join } from 'node:path'
@@ -22,6 +22,7 @@ export interface SkillMetadata {
   contentHash: string
   permissions?: SkillPermissions
   requires?: SkillRequirements
+  compatibility?: SkillCompatibility
 }
 
 export interface CategoryMetadata {
